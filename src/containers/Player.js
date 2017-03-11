@@ -19,7 +19,7 @@ class Player extends Component {
                     className={this.props.className}
                     sources={this.state.sources}
                     isPlaying={this.props.isPlaying}
-                    progress={this.props.progress}
+                    seek={this.props.seek}
                     onProceed={this.props.onProceed}
                     onSeek={this.props.onSeek}
                     />
@@ -33,12 +33,12 @@ Player.propTypes = {
     onProceed: PropTypes.func,
     onSeek: PropTypes.func,
     isPlaying: PropTypes.bool,
-    progress: PropTypes.number
+    seek: PropTypes.number
 };
 
 const mapStateToProps = state => ({
     isPlaying: state.player.control.isPlaying,
-    progress: state.player.progress.percentage
+    seek: state.player.progress.seek
 });
 
 function mapDispatchToProps(dispatch) {

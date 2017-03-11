@@ -15,7 +15,7 @@ class PlayerComp extends Component {
     shouldComponentUpdate(nextProps) {
         // if prop playing state is not the same is state playing state, then update
         return !nextProps.isPlaying !== !this.state.isPlaying
-            || nextProps.progress !== this.state.lastSeeked;
+            || nextProps.seek !== this.state.lastSeeked;
     }
 
     componentWillUpdate(nextProps) {
@@ -38,10 +38,10 @@ class PlayerComp extends Component {
             this.videoPlayer.toPause = false;
         }
 
-        if (this.props.progress !== this.state.lastSeeked) {
+        if (this.props.seek !== this.state.lastSeeked) {
             const duration = this.videoPlayer.duration;
-            this.videoPlayer.currentTime = Math.floor(duration * this.props.progress);
-            this.state.lastSeeked = this.props.progress;
+            this.videoPlayer.currentTime = Math.floor(duration * this.props.seek);
+            this.state.lastSeeked = this.props.seek;
         }
     }
 
@@ -83,14 +83,14 @@ PlayerComp.propTypes = {
     className: PropTypes.string,
     sources: PropTypes.arrayOf(PropTypes.string),
     isPlaying: PropTypes.bool,
-    progress: PropTypes.number,
+    seek: PropTypes.number,
     onProceed: PropTypes.func,
     onSeek: PropTypes.func
 };
 
 PlayerComp.defaultProps = {
     isPlaying: false,
-    progress: 0
+    seek: 0
 };
 
 export default PlayerComp;
