@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import PlayerComponent from '../components/PlayerComponent';
+import PlayerComponent from '../components/PlayerComp';
 import * as actions from '../actions/playerActions';
 import DemoVideo from '../../videos/demo.mp4';
 

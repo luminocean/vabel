@@ -1,8 +1,8 @@
 import React from 'react';
 import Player from '../containers/Player';
-import './AppComponent.css';
+import './app.css';
 
-class AppComponent extends React.Component {
+class AppComp extends React.Component {
     render() {
         return (
             <div className="row">
@@ -12,5 +12,5 @@ class AppComponent extends React.Component {
     }
 }
 
-AppComponent.defaultProps = {};
-export default AppComponent;
+AppComp.defaultProps = {};
+export default AppComp;
