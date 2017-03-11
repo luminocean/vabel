@@ -5,8 +5,8 @@ import './App.css';
 class AppComponent extends React.Component {
     render() {
         return (
-            <div>
-                <Player />
+            <div className="row">
+                <Player className="col-sm-6"/>
             </div>
         );
     }

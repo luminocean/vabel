@@ -2,17 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import '../actions/';
-import App from '../components/App';
+import AppComponent from '../components/App';
 
-class AppContainer extends Component {
+class App extends Component {
     render() {
-        const { actions } = this.props;
-        return <App actions={actions} />;
+        return <AppComponent />;
     }
 }
 
-AppContainer.propTypes = {
-    actions: PropTypes.shape({})
+App.propTypes = {
 };
 
 function mapStateToProps(state) { // eslint-disable-line no-unused-vars
@@ -20,10 +18,9 @@ function mapStateToProps(state) { // eslint-disable-line no-unused-vars
     return props;
 }
 
-function mapDispatchToProps(dispatch) {
-    const actions = {};
-    const actionMap = { actions: bindActionCreators(actions, dispatch) };
-    return actionMap;
+function mapDispatchToProps(dispatch) { // eslint-disable-line no-unused-vars
+    const actionProps = {};
+    return actionProps;
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

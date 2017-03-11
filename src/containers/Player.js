@@ -1,28 +1,32 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Player from '../components/Player';
+import PlayerComponent from '../components/Player';
+import * as actions from '../actions/player';
 import DemoVideo from '../../videos/demo.mp4';
 
-class PlayerContainer extends Component {
+class Player extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            src: DemoVideo
+            sources: [DemoVideo]
         };
     }
 
     render() {
         return (
             <div>
-                <Player src={this.state.src} />
+                <PlayerComponent
+                    className={this.props.className}
+                    sources={this.state.sources}
+                    onPlay={this.props.onPlay} />
             </div>
         );
     }
 }
 
-PlayerContainer.propTypes = {
-    actions: PropTypes.shape({})
+Player.propTypes = {
+    className: PropTypes.string,
+    onPlay: PropTypes.func
 };
 
 function mapStateToProps(state) { // eslint-disable-line no-unused-vars
@@ -31,8 +35,10 @@ function mapStateToProps(state) { // eslint-disable-line no-unused-vars
 }
 
 function mapDispatchToProps(dispatch) { // eslint-disable-line no-unused-vars
-    const actionProps = {};
+    const actionProps = {
+        onPlay: () => dispatch(actions.play())
+    };
     return actionProps;
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayerContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(Player);

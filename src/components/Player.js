@@ -1,11 +1,34 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
+import './Player.scss';
 
-const Player = ({ src }) => { // eslint-disable-line
-    return <video src={src} />;
+class PlayerComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.videoPlayer = null;
+    }
+
+    render() {
+        return (
+            <div className={this.props.className}>
+                <video className="player-video" ref={(v) => { this.videoPlayer = v; }}>
+                    {this.props.sources.map(src => <source key={src} src={src} />)}
+                </video>
+                <div className="control-bar">
+                    <span
+                        className="glyphicon glyphicon-play"
+                        aria-hidden="true"
+                        onClick={() => this.props.onPlay()}
+                    />
+                </div>
+            </div>
+        );
+    }
+}
+
+PlayerComponent.propTypes = {
+    className: PropTypes.string,
+    sources: PropTypes.arrayOf(PropTypes.string),
+    onPlay: PropTypes.func
 };
 
-Player.propTypes = {
-    src: PropTypes.string
-};
-
-export default Player;
+export default PlayerComponent;
