@@ -6,7 +6,7 @@ class AppComp extends React.Component {
     render() {
         return (
             <div className="row">
-                <Player className="col-sm-6"/>
+                <Player className="col-sm-8"/>
             </div>
         );
     }

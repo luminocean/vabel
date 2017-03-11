@@ -77,11 +77,8 @@ class PlayerComp extends Component {
                     </div>
                     <div className="col-sm-9">
                         <ProgressBar
-                            min={0}
-                            max={100}
-                            interval={1}
                             progress={this.state.progress}
-                            onClick={i => this.props.onSeek(i / 100)} />
+                            onClick={percentage => this.props.onSeek(percentage)} />
                     </div>
                     <div className="col-sm-1">
                         <span className="timer">{Utils.secondsToTimeString(this.state.progressSec)}</span>
