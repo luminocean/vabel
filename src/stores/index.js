@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import createLogger from 'redux-logger';
-import reducers from '../reducers';
+import reducers from '../reducers/indexReducer';
 
 function reduxStore() {
     const logger = createLogger();
@@ -12,9 +12,9 @@ function reduxStore() {
 
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers
-        module.hot.accept('../reducers', () => {
+        module.hot.accept('../reducers/indexReducer', () => {
             // We need to require for hot reloading to work properly.
-            const nextReducer = require('../reducers'); // eslint-disable-line global-require
+            const nextReducer = require('../reducers/indexReducer'); // eslint-disable-line global-require
             store.replaceReducer(nextReducer);
         });
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import Player from '../containers/Player';
-import './App.css';
+import './AppComponent.css';
 
 class AppComponent extends React.Component {
     render() {
@@ -13,5 +13,4 @@ class AppComponent extends React.Component {
 }
 
 AppComponent.defaultProps = {};
-
 export default AppComponent;

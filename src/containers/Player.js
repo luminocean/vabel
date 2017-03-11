@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import PlayerComponent from '../components/Player';
-import * as actions from '../actions/player';
+import PlayerComponent from '../components/PlayerComponent';
+import * as actions from '../actions/playerActions';
 import DemoVideo from '../../videos/demo.mp4';
 
 class Player extends Component {
@@ -18,7 +18,8 @@ class Player extends Component {
                 <PlayerComponent
                     className={this.props.className}
                     sources={this.state.sources}
-                    onPlay={this.props.onPlay} />
+                    onProceed={this.props.onProceed}
+                    isPlaying={this.props.isPlaying} />
             </div>
         );
     }
@@ -26,17 +27,21 @@ class Player extends Component {
 
 Player.propTypes = {
     className: PropTypes.string,
-    onPlay: PropTypes.func
+    onProceed: PropTypes.func,
+    isPlaying: PropTypes.bool
 };
 
-function mapStateToProps(state) { // eslint-disable-line no-unused-vars
-    const props = {};
-    return props;
-}
+const mapStateToProps = state => ({
+    isPlaying: state.player.control.isPlaying
+});
 
-function mapDispatchToProps(dispatch) { // eslint-disable-line no-unused-vars
+function mapDispatchToProps(dispatch) {
     const actionProps = {
-        onPlay: () => dispatch(actions.play())
+        // user choose to proceed playing video or not
+        onProceed: (proceed) => {
+            if (proceed) dispatch(actions.play());
+            else dispatch(actions.pause());
+        }
     };
     return actionProps;
 }
