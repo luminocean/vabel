@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ProgressBar from './ProgressBarComp';
+import Utils from '../util/utils';
 import './player.scss';
 
 class PlayerComp extends Component {
@@ -8,14 +9,20 @@ class PlayerComp extends Component {
         this.videoPlayer = null;
         this.state = {
             isPlaying: false,
-            lastSeeked: 0
+            lastSeeked: 0, // in percentage
+            progress: 0 // in seconds
         };
     }
 
-    shouldComponentUpdate(nextProps) {
-        // if prop playing state is not the same is state playing state, then update
-        return !nextProps.isPlaying !== !this.state.isPlaying
-            || nextProps.seek !== this.state.lastSeeked;
+    componentDidMount() {
+        setInterval(() => {
+            if (this.videoPlayer && this.state.isPlaying) {
+                const time = Math.floor(this.videoPlayer.currentTime);
+                this.setState({
+                    progress: time
+                });
+            }
+        }, 1000);
     }
 
     componentWillUpdate(nextProps) {
@@ -64,14 +71,13 @@ class PlayerComp extends Component {
                         aria-hidden="true"
                         onClick={() => this.props.onProceed(!this.state.isPlaying)}
                     />
-                    <span>
-                        <ProgressBar
-                            className="col-sm-10"
+                    <ProgressBar
+                            className="col-sm-9"
                             min={0}
                             max={100}
                             interval={1}
                             onClick={i => this.props.onSeek(i / 100)} />
-                    </span>
+                    <span className="timer col-sm-1">{Utils.secondsToTimeString(this.state.progress)}</span>
                     <span className="col-sm-1 glyphicon glyphicon-fullscreen" onClick={() => this._fullScreen()}/>
                 </div>
             </div>
