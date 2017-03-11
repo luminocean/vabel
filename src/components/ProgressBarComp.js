@@ -1,15 +1,16 @@
 import React, { PropTypes } from 'react';
 
-const ProgressBarComp = ({max, min, interval, className, onClick}) => {
+const ProgressBarComp = ({className, max, min, interval, progress, onClick}) => {
     const barCount = Math.floor((max - min) / interval);
     const indexes = [];
     for (let i = 0; i < barCount; i += 1) indexes.push(i);
 
     return (
-        <span className={className}>
+        <span className={`video-progress-bar ${className}`}>
             {indexes.map(i =>
                 <span
                     key={i}
+                    className={i > Math.floor(progress * barCount) ? 'unwatched' : 'watched'}
                     onClick={() => onClick(i)}
                 >|</span>)}
         </span>
@@ -17,10 +18,11 @@ const ProgressBarComp = ({max, min, interval, className, onClick}) => {
 };
 
 ProgressBarComp.propTypes = {
+    className: PropTypes.string,
     min: PropTypes.number,
     max: PropTypes.number,
     interval: PropTypes.number,
-    className: PropTypes.string,
+    progress: PropTypes.number,
     onClick: PropTypes.func
 };
 

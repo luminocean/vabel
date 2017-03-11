@@ -10,23 +10,28 @@ class PlayerComp extends Component {
         this.state = {
             isPlaying: false,
             lastSeeked: 0, // in percentage
-            progress: 0 // in seconds
+            progress: 0, // in percentage
+            progressSec: 0 // in seconds
         };
     }
 
+    // set timer
     componentDidMount() {
         setInterval(() => {
             if (this.videoPlayer && this.state.isPlaying) {
                 const time = Math.floor(this.videoPlayer.currentTime);
+                const duration = Math.floor(this.videoPlayer.duration);
+
                 this.setState({
-                    progress: time
+                    progress: time / duration,
+                    progressSec: time
                 });
             }
         }, 1000);
     }
 
+    // to update control icon appearance
     componentWillUpdate(nextProps) {
-        // update control icon appearance
         if (nextProps.isPlaying && !this.state.isPlaying) {
             this.state.isPlaying = true;
             this.videoPlayer.toPlay = true;
@@ -36,6 +41,7 @@ class PlayerComp extends Component {
         }
     }
 
+    // control player
     componentDidUpdate() {
         if (this.videoPlayer.toPlay) {
             this.videoPlayer.play();
@@ -52,10 +58,6 @@ class PlayerComp extends Component {
         }
     }
 
-    _fullScreen() {
-        this.videoPlayer.webkitRequestFullScreen();
-    }
-
     render() {
         return (
             <div className={this.props.className}>
@@ -66,19 +68,27 @@ class PlayerComp extends Component {
                     {this.props.sources.map(src => <source key={src} src={src} />)}
                 </video>
                 <div className="row control-bar">
-                    <span
-                        className={`col-sm-1 glyphicon glyphicon-${this.state.isPlaying ? 'pause' : 'play'}`}
-                        aria-hidden="true"
-                        onClick={() => this.props.onProceed(!this.state.isPlaying)}
-                    />
-                    <ProgressBar
-                            className="col-sm-9"
+                    <div className="col-sm-1">
+                        <span
+                            className={`glyphicon glyphicon-${this.state.isPlaying ? 'pause' : 'play'}`}
+                            aria-hidden="true"
+                            onClick={() => this.props.onProceed(!this.state.isPlaying)}
+                        />
+                    </div>
+                    <div className="col-sm-9">
+                        <ProgressBar
                             min={0}
                             max={100}
                             interval={1}
+                            progress={this.state.progress}
                             onClick={i => this.props.onSeek(i / 100)} />
-                    <span className="timer col-sm-1">{Utils.secondsToTimeString(this.state.progress)}</span>
-                    <span className="col-sm-1 glyphicon glyphicon-fullscreen" onClick={() => this._fullScreen()}/>
+                    </div>
+                    <div className="col-sm-1">
+                        <span className="timer">{Utils.secondsToTimeString(this.state.progressSec)}</span>
+                    </div>
+                    <div className="col-sm-1">
+                        <span className="glyphicon glyphicon-fullscreen" onClick={() => this.videoPlayer.webkitRequestFullScreen()}/>
+                    </div>
                 </div>
             </div>
         );
