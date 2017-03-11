@@ -16,6 +16,17 @@ const control = (state = {}, action) => {
     }
 };
 
-const reducers = { control };
+const progress = (state = {}, action) => {
+    switch (action.type) {
+    case CONSTANTS.VIDEO_SEEK:
+        return Object.assign({}, state, {
+            percentage: action.payload
+        });
+    default:
+        return state;
+    }
+};
+
+const reducers = { control, progress };
 const combined = combineReducers(reducers);
 module.exports = combined;

@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import ProgressBar from './ProgressBarComp'
+import ProgressBar from './ProgressBarComp';
 import './player.scss';
 
 class PlayerComp extends Component {
@@ -7,16 +7,19 @@ class PlayerComp extends Component {
         super(props);
         this.videoPlayer = null;
         this.state = {
-            isPlaying: false
+            isPlaying: false,
+            lastSeeked: 0
         };
     }
 
     shouldComponentUpdate(nextProps) {
         // if prop playing state is not the same is state playing state, then update
-        return !nextProps.isPlaying !== !this.state.isPlaying;
+        return !nextProps.isPlaying !== !this.state.isPlaying
+            || nextProps.progress !== this.state.lastSeeked;
     }
 
     componentWillUpdate(nextProps) {
+        // update control icon appearance
         if (nextProps.isPlaying && !this.state.isPlaying) {
             this.state.isPlaying = true;
             this.videoPlayer.toPlay = true;
@@ -34,14 +37,16 @@ class PlayerComp extends Component {
             this.videoPlayer.pause();
             this.videoPlayer.toPause = false;
         }
+
+        if (this.props.progress !== this.state.lastSeeked) {
+            const duration = this.videoPlayer.duration;
+            this.videoPlayer.currentTime = Math.floor(duration * this.props.progress);
+            this.state.lastSeeked = this.props.progress;
+        }
     }
 
     _fullScreen() {
         this.videoPlayer.webkitRequestFullScreen();
-    }
-
-    _seek(percentage) { // eslint-disable-line
-        console.log(percentage); // eslint-disable-line
     }
 
     render() {
@@ -65,7 +70,7 @@ class PlayerComp extends Component {
                             min={0}
                             max={100}
                             interval={1}
-                            onClick={i => this._seek(i / 100)} />
+                            onClick={i => this.props.onSeek(i / 100)} />
                     </span>
                     <span className="col-sm-1 glyphicon glyphicon-fullscreen" onClick={() => this._fullScreen()}/>
                 </div>
@@ -77,12 +82,15 @@ class PlayerComp extends Component {
 PlayerComp.propTypes = {
     className: PropTypes.string,
     sources: PropTypes.arrayOf(PropTypes.string),
+    isPlaying: PropTypes.bool,
+    progress: PropTypes.number,
     onProceed: PropTypes.func,
-    isPlaying: PropTypes.bool
+    onSeek: PropTypes.func
 };
 
 PlayerComp.defaultProps = {
-    isPlaying: false
+    isPlaying: false,
+    progress: 0
 };
 
 export default PlayerComp;

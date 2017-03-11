@@ -18,8 +18,11 @@ class Player extends Component {
                 <PlayerComponent
                     className={this.props.className}
                     sources={this.state.sources}
+                    isPlaying={this.props.isPlaying}
+                    progress={this.props.progress}
                     onProceed={this.props.onProceed}
-                    isPlaying={this.props.isPlaying} />
+                    onSeek={this.props.onSeek}
+                    />
             </div>
         );
     }
@@ -28,11 +31,14 @@ class Player extends Component {
 Player.propTypes = {
     className: PropTypes.string,
     onProceed: PropTypes.func,
-    isPlaying: PropTypes.bool
+    onSeek: PropTypes.func,
+    isPlaying: PropTypes.bool,
+    progress: PropTypes.number
 };
 
 const mapStateToProps = state => ({
-    isPlaying: state.player.control.isPlaying
+    isPlaying: state.player.control.isPlaying,
+    progress: state.player.progress.percentage
 });
 
 function mapDispatchToProps(dispatch) {
@@ -41,7 +47,8 @@ function mapDispatchToProps(dispatch) {
         onProceed: (proceed) => {
             if (proceed) dispatch(actions.play());
             else dispatch(actions.pause());
-        }
+        },
+        onSeek: percentage => dispatch(actions.seek(percentage))
     };
     return actionProps;
 }
