@@ -20,7 +20,7 @@ const progress = (state = {}, action) => {
     switch (action.type) {
     case CONSTANTS.VIDEO_SEEK:
         return Object.assign({}, state, {
-            seek: action.payload
+            toSeek: action.payload
         });
     default:
         return state;

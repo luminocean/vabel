@@ -9,61 +9,57 @@ class PlayerComp extends Component {
         this.videoPlayer = null;
         this.state = {
             isPlaying: false,
-            lastSeeked: 0, // in percentage
+            lastSeeked: 0, // in percentage,
             progress: 0, // in percentage
-            progressSec: 0 // in seconds
+            duration: 0 // in seconds
         };
     }
 
     // set timer
     componentDidMount() {
-        setInterval(() => {
-            if (this.videoPlayer && this.state.isPlaying) {
-                const time = Math.floor(this.videoPlayer.currentTime);
-                const duration = Math.floor(this.videoPlayer.duration);
-
-                this.setState({
-                    progress: time / duration,
-                    progressSec: time
-                });
-            }
-        }, 1000);
+        this._startUpdatingProgress();
     }
 
-    // to update control icon appearance
     componentWillUpdate(nextProps) {
-        if (nextProps.isPlaying && !this.state.isPlaying) {
+        // control play or pause
+        if (this.videoPlayer && nextProps.isPlaying && !this.state.isPlaying) {
             this.state.isPlaying = true;
-            this.videoPlayer.toPlay = true;
-        } else if (!nextProps.isPlaying && this.props.isPlaying) {
-            this.state.isPlaying = false;
-            this.videoPlayer.toPause = true;
-        }
-    }
-
-    // control player
-    componentDidUpdate() {
-        // play or pause
-        if (this.videoPlayer.toPlay) {
             this.videoPlayer.play();
-            this.videoPlayer.toPlay = false;
-        } else if (this.videoPlayer.toPause) {
+        } else if (this.videoPlayer && !nextProps.isPlaying && this.props.isPlaying) {
+            this.state.isPlaying = false;
             this.videoPlayer.pause();
-            this.videoPlayer.toPause = false;
         }
 
         // seek
-        if (this.props.seek !== this.state.lastSeeked) {
-            const duration = this.videoPlayer.duration;
-            this.videoPlayer.currentTime = Math.floor(duration * this.props.seek);
-            this.state.lastSeeked = this.props.seek;
+        if (this.videoPlayer && this.props.toSeek !== this.state.lastSeeked) {
+            const playedTime = Math.floor(this.state.duration * this.props.toSeek);
+            this.videoPlayer.currentTime = playedTime;
+            this.setState({
+                lastSeeked: this.props.toSeek
+            });
+            this._updateProgressBar();
+        }
+    }
+
+    _startUpdatingProgress() {
+        this._updateProgressBar();
+        setInterval(() => {
+            this._updateProgressBar();
+        }, 1000);
+    }
+
+    _updateProgressBar() {
+        if (this.videoPlayer && this.state.isPlaying) {
+            const duration = Math.floor(this.videoPlayer.duration);
+            const playerTime = Math.floor(this.videoPlayer.currentTime);
+            const progress = playerTime / duration;
+            this.setState({progress, duration});
         }
     }
 
     render() {
         return (
             <div className={this.props.className}>
-
                 <video
                     id="video"
                     className="player-video"
@@ -72,6 +68,7 @@ class PlayerComp extends Component {
                     {this.props.sources.map(src => <source key={src} src={src} />)}
                 </video>
 
+                {/* control bar */}
                 <div className="row control-bar">
                     {/* play or pause */}
                     <div className="col-sm-1">
@@ -86,12 +83,12 @@ class PlayerComp extends Component {
                     <div className="col-sm-9">
                         <ProgressBar
                             progress={this.state.progress}
-                            onClick={percentage => this.props.onSeek(percentage)} />
+                            onSeek={percentage => this.props.onSeek(percentage)} />
                     </div>
 
                     {/* timer */}
                     <div className="col-sm-1">
-                        <span className="timer">{Utils.secondsToTimeString(this.state.progressSec)}</span>
+                        <span className="timer">{Utils.secondsToTimeString(this.state.duration * this.state.progress)}</span>
                     </div>
 
                     {/* full screen */}
@@ -108,14 +105,14 @@ PlayerComp.propTypes = {
     className: PropTypes.string,
     sources: PropTypes.arrayOf(PropTypes.string),
     isPlaying: PropTypes.bool,
-    seek: PropTypes.number,
+    toSeek: PropTypes.number,
     onProceed: PropTypes.func,
     onSeek: PropTypes.func
 };
 
 PlayerComp.defaultProps = {
     isPlaying: false,
-    seek: 0
+    toSeek: 0
 };
 
 export default PlayerComp;
