@@ -40,7 +40,7 @@ class Player extends Component {
 
 Player.propTypes = {
     playing: PropTypes.bool,
-    toSeek: PropTypes.bool, // eslint-disable-line
+    toSeek: PropTypes.number, // eslint-disable-line
     toLeap: PropTypes.bool, // eslint-disable-line
     seekDone: PropTypes.func,
     leapDone: PropTypes.func,

@@ -2,7 +2,11 @@ import { combineReducers } from 'redux';
 import { CONSTANTS } from '../actions/playerActions';
 import { CONSTANTS as CROP_CONSTANTS } from '../actions/cropActions';
 
-const control = (state = {}, action) => {
+const initState = {
+    videoExists: true
+};
+
+const control = (state = initState, action) => {
     switch (action.type) {
     case CONSTANTS.VIDEO_PLAY:
         return Object.assign({}, state, {
@@ -33,7 +37,7 @@ const control = (state = {}, action) => {
     }
 };
 
-const progress = (state = {}, action) => {
+const progress = (state = initState, action) => {
     switch (action.type) {
     case CONSTANTS.VIDEO_SEEK:
         return Object.assign({}, state, {

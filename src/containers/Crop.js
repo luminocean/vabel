@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import CropComponent from '../components/CropComponent';
+import CropComponent from '../components/CropComp';
 import * as actions from '../actions/cropActions';
 
 class Crop extends Component {

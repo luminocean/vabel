@@ -1,71 +1,16 @@
 import React, { PropTypes, Component } from 'react';
+import VideoComp from './VideoComp';
 import ProgressBar from './ProgressBarComp';
 import Utils from '../logic/utils';
 import './player.scss';
 
-class PlayerComp extends Component {
-    constructor(props) {
-        super(props);
-        this.videoPlayer = null;
-        this.videoDuration = 0; // in seconds
-        this.leapPercentage = 0.01;
-
-        this.state = {
-            playing: false,
-            lastSeeked: 0, // in percentage
-            progress: 0, // in percentage
-            toSeek: null
-        };
-        // export delegate
-        if (props.delegate) props.delegate(this.delegate);
-    }
-
+class PlayerComp extends VideoComp {
     componentDidMount() {
         // set timer
         this._updateProgressBar();
         setInterval(() => {
             this._updateProgressBar();
         }, 300);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        // do playing or pausing
-        if (this.videoPlayer && nextProps.playing && !this.state.playing) {
-            this.state.playing = true;
-            this.videoPlayer.play();
-        } else if (this.videoPlayer && !nextProps.playing && this.props.playing) {
-            this.state.playing = false;
-            this.videoPlayer.pause();
-        }
-    }
-
-    set player(videoElemement) {
-        const ele = videoElemement;
-        if (!ele) return; // videoElemement might be undefined
-
-        ele.ondurationchange = () => {
-            this.videoPlayer = videoElemement;
-            this.videoDuration = videoElemement.duration;
-        };
-    }
-
-    get delegate() {
-        const seek = (percentage) => {
-            if (!this.videoPlayer) return;
-            this.videoPlayer.currentTime = Math.floor(this.videoDuration * percentage);
-            this._updateProgressBar();
-        };
-
-        return {
-            seek: (percentage) => {
-                seek(percentage);
-            },
-            leap: (direction) => {
-                let progress = this.state.progress;
-                progress += this.leapPercentage * (direction ? 1 : -1);
-                seek(progress);
-            }
-        };
     }
 
     // make state updated with current video progress
@@ -82,13 +27,8 @@ class PlayerComp extends Component {
     render() {
         return (
             <div>
-                <video
-                    id="video"
-                    className="player-video"
-                    ref={(v) => { if (v) this.player = v; }}
-                    onClick={() => this.props.onProceed(!this.state.playing)}>
-                    {this.props.sources.map(src => <source key={src} src={src} />)}
-                </video>
+                {/* video */}
+                {super.render()}
 
                 {/* control bar */}
                 <div className="row control-bar">
@@ -124,15 +64,7 @@ class PlayerComp extends Component {
 }
 
 PlayerComp.propTypes = {
-    sources: PropTypes.arrayOf(PropTypes.string),
-    playing: PropTypes.bool,
-    delegate: PropTypes.func,
-    onProceed: PropTypes.func,
     onSeek: PropTypes.func
-};
-
-PlayerComp.defaultProps = {
-    playing: false
 };
 
 export default PlayerComp;
