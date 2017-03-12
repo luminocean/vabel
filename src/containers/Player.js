@@ -29,7 +29,7 @@ class Player extends Component {
                 <PlayerComponent
                     delegate={(delegate) => { this.component = delegate; }}
                     sources={this.state.sources}
-                    isPlaying={this.props.isPlaying}
+                    playing={this.props.playing}
                     onProceed={this.props.onProceed}
                     onSeek={this.props.onSeek}
                     />
@@ -39,22 +39,22 @@ class Player extends Component {
 }
 
 Player.propTypes = {
-    isPlaying: PropTypes.bool,
-    toSeek: PropTypes.number,
+    playing: PropTypes.bool,
+    toSeek: PropTypes.bool, // eslint-disable-line
+    toLeap: PropTypes.bool, // eslint-disable-line
     seekDone: PropTypes.func,
-    toLeap: PropTypes.bool,
     leapDone: PropTypes.func,
     onProceed: PropTypes.func,
     onSeek: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-    isPlaying: state.player.control.isPlaying,
+    playing: state.player.control.playing,
     toSeek: state.player.progress.toSeek,
     toLeap: state.player.progress.toLeap
 });
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
     const actionProps = {
         // user choose to proceed playing video or not
         onProceed: (proceed) => {
@@ -66,6 +66,6 @@ function mapDispatchToProps(dispatch) {
         leapDone: () => dispatch(actions.leapDone())
     };
     return actionProps;
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

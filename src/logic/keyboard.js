@@ -1,11 +1,13 @@
 import * as playerActions from '../actions/playerActions';
+import * as cropActions from '../actions/cropActions';
 
 const KeyCodes = {
     SPACE: 32,
     LEFT_BRACE: 91,
     RIGHT_BRACE: 93,
     GREATER: 46,
-    LESS: 44
+    LESS: 44,
+    C: 99
 };
 
 export default class Keyboard {
@@ -21,13 +23,19 @@ export default class Keyboard {
         window.onkeypress = (ev) => {
             switch (ev.keyCode) {
             case KeyCodes.SPACE: this._pauseOrPlay(); break;
-            case KeyCodes.LESS : this._leap(false); break;
-            case KeyCodes.GREATER : this._leap(true); break;
+            case KeyCodes.LESS: this._leap(false); break;
+            case KeyCodes.GREATER: this._leap(true); break;
+            case KeyCodes.C: this._crop(); break;
             default:
-                console.log(`Unhandled key pressed: ${keyCode}`); // eslint-disable-line
+                console.log(`Unhandled key pressed: ${ev.keyCode}`); // eslint-disable-line
                 break;
             }
         };
+    }
+
+    _crop() {
+        this._dispatch(this.state.crop.control.croping ?
+            cropActions.cropDone() : cropActions.crop());
     }
 
     _leap(direction) {
@@ -35,8 +43,8 @@ export default class Keyboard {
     }
 
     _pauseOrPlay() {
-        const isPlaying = this.state.player.control.isPlaying;
-        this._dispatch(isPlaying ? playerActions.pause() : playerActions.play());
+        const playing = this.state.player.control.playing;
+        this._dispatch(playing ? playerActions.pause() : playerActions.play());
     }
 
     _dispatch(action) {

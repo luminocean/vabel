@@ -11,7 +11,7 @@ class PlayerComp extends Component {
         this.leapPercentage = 0.01;
 
         this.state = {
-            isPlaying: false,
+            playing: false,
             lastSeeked: 0, // in percentage
             progress: 0, // in percentage
             toSeek: null
@@ -30,11 +30,11 @@ class PlayerComp extends Component {
 
     componentWillReceiveProps(nextProps) {
         // do playing or pausing
-        if (this.videoPlayer && nextProps.isPlaying && !this.state.isPlaying) {
-            this.state.isPlaying = true;
+        if (this.videoPlayer && nextProps.playing && !this.state.playing) {
+            this.state.playing = true;
             this.videoPlayer.play();
-        } else if (this.videoPlayer && !nextProps.isPlaying && this.props.isPlaying) {
-            this.state.isPlaying = false;
+        } else if (this.videoPlayer && !nextProps.playing && this.props.playing) {
+            this.state.playing = false;
             this.videoPlayer.pause();
         }
     }
@@ -71,7 +71,7 @@ class PlayerComp extends Component {
     // make state updated with current video progress
     // so that progress bar can also be updated
     _updateProgressBar() {
-        if (this.videoPlayer && this.state.isPlaying) {
+        if (this.videoPlayer && this.state.playing) {
             const playedTime = Math.floor(this.videoPlayer.currentTime);
             this.setState({
                 progress: playedTime / this.videoDuration
@@ -86,7 +86,7 @@ class PlayerComp extends Component {
                     id="video"
                     className="player-video"
                     ref={(v) => { if (v) this.player = v; }}
-                    onClick={() => this.props.onProceed(!this.state.isPlaying)}>
+                    onClick={() => this.props.onProceed(!this.state.playing)}>
                     {this.props.sources.map(src => <source key={src} src={src} />)}
                 </video>
 
@@ -95,9 +95,9 @@ class PlayerComp extends Component {
                     {/* play or pause */}
                     <div className="col-sm-1">
                         <span
-                            className={`glyphicon glyphicon-${this.state.isPlaying ? 'pause' : 'play'}`}
+                            className={`glyphicon glyphicon-${this.state.playing ? 'pause' : 'play'}`}
                             aria-hidden="true"
-                            onClick={() => this.props.onProceed(!this.state.isPlaying)}
+                            onClick={() => this.props.onProceed(!this.state.playing)}
                         />
                     </div>
 
@@ -125,14 +125,14 @@ class PlayerComp extends Component {
 
 PlayerComp.propTypes = {
     sources: PropTypes.arrayOf(PropTypes.string),
-    isPlaying: PropTypes.bool,
+    playing: PropTypes.bool,
     delegate: PropTypes.func,
     onProceed: PropTypes.func,
     onSeek: PropTypes.func
 };
 
 PlayerComp.defaultProps = {
-    isPlaying: false
+    playing: false
 };
 
 export default PlayerComp;
