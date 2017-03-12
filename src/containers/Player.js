@@ -16,7 +16,6 @@ class Player extends Component {
         return (
             <div>
                 <PlayerComponent
-                    className={this.props.className}
                     sources={this.state.sources}
                     isPlaying={this.props.isPlaying}
                     toSeek={this.props.toSeek}
@@ -29,7 +28,6 @@ class Player extends Component {
 }
 
 Player.propTypes = {
-    className: PropTypes.string,
     isPlaying: PropTypes.bool,
     toSeek: PropTypes.number,
     onProceed: PropTypes.func,

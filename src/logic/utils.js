@@ -4,7 +4,7 @@ function leftpad(str, toLength, fill) {
 }
 
 function secondsToTimeString(seconds) {
-    const secs = seconds % 60;
+    const secs = Math.floor(seconds % 60);
     const minutes = Math.floor((seconds % 3600) / 60);
     return `${leftpad(minutes.toString(), 2, '0')}:${leftpad(secs.toString(), 2, '0')}`;
 }

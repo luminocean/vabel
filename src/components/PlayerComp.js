@@ -7,21 +7,24 @@ class PlayerComp extends Component {
     constructor(props) {
         super(props);
         this.videoPlayer = null;
+        this.videoDuration = 0; // in seconds
         this.state = {
             isPlaying: false,
-            lastSeeked: 0, // in percentage,
+            lastSeeked: 0, // in percentage
             progress: 0, // in percentage
-            duration: 0 // in seconds
         };
     }
 
-    // set timer
     componentDidMount() {
-        this._startUpdatingProgress();
+        // set timer
+        this._updateProgressBar();
+        setInterval(() => {
+            this._updateProgressBar();
+        }, 1000);
     }
 
     componentWillUpdate(nextProps) {
-        // control play or pause
+        // do playing or pausing
         if (this.videoPlayer && nextProps.isPlaying && !this.state.isPlaying) {
             this.state.isPlaying = true;
             this.videoPlayer.play();
@@ -30,9 +33,9 @@ class PlayerComp extends Component {
             this.videoPlayer.pause();
         }
 
-        // seek
+        // do seeking
         if (this.videoPlayer && this.props.toSeek !== this.state.lastSeeked) {
-            const playedTime = Math.floor(this.state.duration * this.props.toSeek);
+            const playedTime = Math.floor(this.videoDuration * this.props.toSeek);
             this.videoPlayer.currentTime = playedTime;
             this.setState({
                 lastSeeked: this.props.toSeek
@@ -41,29 +44,32 @@ class PlayerComp extends Component {
         }
     }
 
-    _startUpdatingProgress() {
-        this._updateProgressBar();
-        setInterval(() => {
-            this._updateProgressBar();
-        }, 1000);
+    set player(videoElemement) {
+        const ele = videoElemement;
+        ele.ondurationchange = () => {
+            this.videoPlayer = videoElemement;
+            this.videoDuration = videoElemement.duration;
+        };
     }
 
+    // make state updated with current video progress
+    // so that progress bar can also be updated
     _updateProgressBar() {
         if (this.videoPlayer && this.state.isPlaying) {
-            const duration = Math.floor(this.videoPlayer.duration);
-            const playerTime = Math.floor(this.videoPlayer.currentTime);
-            const progress = playerTime / duration;
-            this.setState({progress, duration});
+            const playedTime = Math.floor(this.videoPlayer.currentTime);
+            this.setState({
+                progress: playedTime / this.videoDuration
+            });
         }
     }
 
     render() {
         return (
-            <div className={this.props.className}>
+            <div>
                 <video
                     id="video"
                     className="player-video"
-                    ref={(v) => { this.videoPlayer = v; }}
+                    ref={(v) => { if (v) this.player = v; }}
                     onClick={() => this.props.onProceed(!this.state.isPlaying)}>
                     {this.props.sources.map(src => <source key={src} src={src} />)}
                 </video>
@@ -88,7 +94,7 @@ class PlayerComp extends Component {
 
                     {/* timer */}
                     <div className="col-sm-1">
-                        <span className="timer">{Utils.secondsToTimeString(this.state.duration * this.state.progress)}</span>
+                        <span className="timer">{Utils.secondsToTimeString(this.videoDuration * this.state.progress)}</span>
                     </div>
 
                     {/* full screen */}
@@ -102,7 +108,6 @@ class PlayerComp extends Component {
 }
 
 PlayerComp.propTypes = {
-    className: PropTypes.string,
     sources: PropTypes.arrayOf(PropTypes.string),
     isPlaying: PropTypes.bool,
     toSeek: PropTypes.number,
