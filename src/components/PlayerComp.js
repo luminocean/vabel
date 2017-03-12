@@ -8,12 +8,15 @@ class PlayerComp extends Component {
         super(props);
         this.videoPlayer = null;
         this.videoDuration = 0; // in seconds
+        this.leapPercentage = 0.01;
+
         this.state = {
             isPlaying: false,
             lastSeeked: 0, // in percentage
             progress: 0, // in percentage
             toSeek: null
         };
+        // export delegate
         if (props.delegate) props.delegate(this.delegate);
     }
 
@@ -22,7 +25,7 @@ class PlayerComp extends Component {
         this._updateProgressBar();
         setInterval(() => {
             this._updateProgressBar();
-        }, 1000);
+        }, 300);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -38,6 +41,8 @@ class PlayerComp extends Component {
 
     set player(videoElemement) {
         const ele = videoElemement;
+        if (!ele) return; // videoElemement might be undefined
+
         ele.ondurationchange = () => {
             this.videoPlayer = videoElemement;
             this.videoDuration = videoElemement.duration;
@@ -45,11 +50,20 @@ class PlayerComp extends Component {
     }
 
     get delegate() {
+        const seek = (percentage) => {
+            if (!this.videoPlayer) return;
+            this.videoPlayer.currentTime = Math.floor(this.videoDuration * percentage);
+            this._updateProgressBar();
+        };
+
         return {
             seek: (percentage) => {
-                if (!this.videoPlayer) return;
-                this.videoPlayer.currentTime = Math.floor(this.videoDuration * percentage);
-                this._updateProgressBar();
+                seek(percentage);
+            },
+            leap: (direction) => {
+                let progress = this.state.progress;
+                progress += this.leapPercentage * (direction ? 1 : -1);
+                seek(progress);
             }
         };
     }

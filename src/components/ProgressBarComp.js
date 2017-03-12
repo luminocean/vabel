@@ -10,7 +10,7 @@ class ProgressBarComp extends Component {
     render() {
         const clientWidth = document.body.clientWidth;
         // how many bars to display
-        const barCount = Math.floor(140 * (clientWidth / 1024));
+        const barCount = Math.floor(120 * (clientWidth / 1024));
         const indexes = [];
         for (let i = 0; i < barCount; i += 1) indexes.push(i);
         return (

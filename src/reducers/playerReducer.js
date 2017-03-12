@@ -22,6 +22,18 @@ const progress = (state = {}, action) => {
         return Object.assign({}, state, {
             toSeek: action.payload
         });
+    case CONSTANTS.VIDEO_SEEK_DONE:
+        return Object.assign({}, state, {
+            toSeek: undefined
+        });
+    case CONSTANTS.VIDEO_LEAP:
+        return Object.assign({}, state, {
+            toLeap: action.payload
+        });
+    case CONSTANTS.VIDEO_LEAP_DONE:
+        return Object.assign({}, state, {
+            toLeap: undefined
+        });
     default:
         return state;
     }

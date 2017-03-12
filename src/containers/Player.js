@@ -14,8 +14,12 @@ class Player extends Component {
 
     componentWillReceiveProps(nextProps) {
         // toSeek property is used to control player video progress
-        if (nextProps.toSeek !== this.props.toSeek) {
+        if (nextProps.toSeek) {
             this.component.seek(nextProps.toSeek);
+            this.props.seekDone();
+        } else if (nextProps.toLeap !== undefined) {
+            this.component.leap(nextProps.toLeap);
+            this.props.leapDone();
         }
     }
 
@@ -37,13 +41,17 @@ class Player extends Component {
 Player.propTypes = {
     isPlaying: PropTypes.bool,
     toSeek: PropTypes.number,
+    seekDone: PropTypes.func,
+    toLeap: PropTypes.bool,
+    leapDone: PropTypes.func,
     onProceed: PropTypes.func,
     onSeek: PropTypes.func
 };
 
 const mapStateToProps = state => ({
     isPlaying: state.player.control.isPlaying,
-    toSeek: state.player.progress.toSeek
+    toSeek: state.player.progress.toSeek,
+    toLeap: state.player.progress.toLeap
 });
 
 function mapDispatchToProps(dispatch) {
@@ -53,7 +61,9 @@ function mapDispatchToProps(dispatch) {
             if (proceed) dispatch(actions.play());
             else dispatch(actions.pause());
         },
-        onSeek: percentage => dispatch(actions.seek(percentage))
+        onSeek: percentage => dispatch(actions.seek(percentage)),
+        seekDone: () => dispatch(actions.seekDone()),
+        leapDone: () => dispatch(actions.leapDone())
     };
     return actionProps;
 }
