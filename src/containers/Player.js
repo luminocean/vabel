@@ -12,13 +12,20 @@ class Player extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        // toSeek property is used to control player video progress
+        if (nextProps.toSeek !== this.props.toSeek) {
+            this.component.seek(nextProps.toSeek);
+        }
+    }
+
     render() {
         return (
             <div>
                 <PlayerComponent
+                    delegate={(delegate) => { this.component = delegate; }}
                     sources={this.state.sources}
                     isPlaying={this.props.isPlaying}
-                    toSeek={this.props.toSeek}
                     onProceed={this.props.onProceed}
                     onSeek={this.props.onSeek}
                     />

@@ -12,7 +12,9 @@ class PlayerComp extends Component {
             isPlaying: false,
             lastSeeked: 0, // in percentage
             progress: 0, // in percentage
+            toSeek: null
         };
+        if (props.delegate) props.delegate(this.delegate);
     }
 
     componentDidMount() {
@@ -23,7 +25,7 @@ class PlayerComp extends Component {
         }, 1000);
     }
 
-    componentWillUpdate(nextProps) {
+    componentWillReceiveProps(nextProps) {
         // do playing or pausing
         if (this.videoPlayer && nextProps.isPlaying && !this.state.isPlaying) {
             this.state.isPlaying = true;
@@ -32,16 +34,6 @@ class PlayerComp extends Component {
             this.state.isPlaying = false;
             this.videoPlayer.pause();
         }
-
-        // do seeking
-        if (this.videoPlayer && this.props.toSeek !== this.state.lastSeeked) {
-            const playedTime = Math.floor(this.videoDuration * this.props.toSeek);
-            this.videoPlayer.currentTime = playedTime;
-            this.setState({
-                lastSeeked: this.props.toSeek
-            });
-            this._updateProgressBar();
-        }
     }
 
     set player(videoElemement) {
@@ -49,6 +41,16 @@ class PlayerComp extends Component {
         ele.ondurationchange = () => {
             this.videoPlayer = videoElemement;
             this.videoDuration = videoElemement.duration;
+        };
+    }
+
+    get delegate() {
+        return {
+            seek: (percentage) => {
+                if (!this.videoPlayer) return;
+                this.videoPlayer.currentTime = Math.floor(this.videoDuration * percentage);
+                this._updateProgressBar();
+            }
         };
     }
 
@@ -110,14 +112,13 @@ class PlayerComp extends Component {
 PlayerComp.propTypes = {
     sources: PropTypes.arrayOf(PropTypes.string),
     isPlaying: PropTypes.bool,
-    toSeek: PropTypes.number,
+    delegate: PropTypes.func,
     onProceed: PropTypes.func,
     onSeek: PropTypes.func
 };
 
 PlayerComp.defaultProps = {
-    isPlaying: false,
-    toSeek: 0
+    isPlaying: false
 };
 
 export default PlayerComp;
