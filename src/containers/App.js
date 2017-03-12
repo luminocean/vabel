@@ -10,9 +10,6 @@ class App extends Component {
     }
 }
 
-App.propTypes = {
-};
-
 function mapStateToProps(state) { // eslint-disable-line no-unused-vars
     const props = {};
     return props;

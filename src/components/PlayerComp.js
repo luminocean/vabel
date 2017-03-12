@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import ProgressBar from './ProgressBarComp';
-import Utils from '../util/utils';
+import Utils from '../logic/utils';
 import './player.scss';
 
 class PlayerComp extends Component {
@@ -43,6 +43,7 @@ class PlayerComp extends Component {
 
     // control player
     componentDidUpdate() {
+        // play or pause
         if (this.videoPlayer.toPlay) {
             this.videoPlayer.play();
             this.videoPlayer.toPlay = false;
@@ -51,6 +52,7 @@ class PlayerComp extends Component {
             this.videoPlayer.toPause = false;
         }
 
+        // seek
         if (this.props.seek !== this.state.lastSeeked) {
             const duration = this.videoPlayer.duration;
             this.videoPlayer.currentTime = Math.floor(duration * this.props.seek);
@@ -61,13 +63,17 @@ class PlayerComp extends Component {
     render() {
         return (
             <div className={this.props.className}>
+
                 <video
                     id="video"
                     className="player-video"
-                    ref={(v) => { this.videoPlayer = v; }}>
+                    ref={(v) => { this.videoPlayer = v; }}
+                    onClick={() => this.props.onProceed(!this.state.isPlaying)}>
                     {this.props.sources.map(src => <source key={src} src={src} />)}
                 </video>
+
                 <div className="row control-bar">
+                    {/* play or pause */}
                     <div className="col-sm-1">
                         <span
                             className={`glyphicon glyphicon-${this.state.isPlaying ? 'pause' : 'play'}`}
@@ -75,14 +81,20 @@ class PlayerComp extends Component {
                             onClick={() => this.props.onProceed(!this.state.isPlaying)}
                         />
                     </div>
+
+                    {/* progress bar */}
                     <div className="col-sm-9">
                         <ProgressBar
                             progress={this.state.progress}
                             onClick={percentage => this.props.onSeek(percentage)} />
                     </div>
+
+                    {/* timer */}
                     <div className="col-sm-1">
                         <span className="timer">{Utils.secondsToTimeString(this.state.progressSec)}</span>
                     </div>
+
+                    {/* full screen */}
                     <div className="col-sm-1">
                         <span className="glyphicon glyphicon-fullscreen" onClick={() => this.videoPlayer.webkitRequestFullScreen()}/>
                     </div>
