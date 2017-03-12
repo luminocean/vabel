@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-class VideoComp extends Component {
+class BasePlayerComp extends Component {
     constructor(props) {
         super(props);
         this.videoPlayer = null;
@@ -40,6 +40,7 @@ class VideoComp extends Component {
         this.videoPlayer = ele;
         ele.ondurationchange = () => {
             this.videoDuration = ele.duration;
+            this.videoPlayer.currentTime = this.props.video.progress * ele.duration;
         };
     }
 
@@ -85,7 +86,7 @@ class VideoComp extends Component {
     }
 }
 
-VideoComp.propTypes = {
+BasePlayerComp.propTypes = {
     video: PropTypes.shape({
         src: PropTypes.string,
         progress: PropTypes.number
@@ -96,8 +97,8 @@ VideoComp.propTypes = {
     onProgressTick: PropTypes.func
 };
 
-VideoComp.defaultProps = {
+BasePlayerComp.defaultProps = {
     playing: false
 };
 
-export default VideoComp;
+export default BasePlayerComp;

@@ -8,7 +8,7 @@ class Crop extends Component {
     render() {
         return (
             <CropComponent
-                source={DemoVideo}
+                video={this.props.video}
                 show={this.props.show}
                 onClose={() => this.props.onClose()} />
         );
@@ -16,12 +16,17 @@ class Crop extends Component {
 }
 
 Crop.propTypes = {
+    video: PropTypes.shape({
+        src: PropTypes.string,
+        progress: PropTypes.number
+    }),
     show: PropTypes.bool,
     onClose: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-    show: state.crop.control.croping
+    show: state.crop.control.croping,
+    video: state.video
 });
 
 const mapDispatchToProps = dispatch => ({ // eslint-disable-line no-unused-vars

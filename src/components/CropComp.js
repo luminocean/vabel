@@ -44,7 +44,7 @@ class CropComponent extends Component {
                         <div className="row">
                             <div className="col-sm-6" />
                             <div className="col-sm-3">
-                                <BasePlayerComp sources={[this.props.source]}/>
+                                <BasePlayerComp video={this.props.video}/>
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,10 @@ class CropComponent extends Component {
 }
 
 CropComponent.propTypes = {
-    source: PropTypes.string,
+    video: PropTypes.shape({
+        src: PropTypes.string,
+        progress: PropTypes.number
+    }),
     show: PropTypes.bool, // eslint-disable-line
     onClose: PropTypes.func
 };
