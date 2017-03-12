@@ -2,11 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import CropComponent from '../components/CropComp';
 import * as actions from '../actions/cropActions';
+import DemoVideo from '../../videos/demo.mp4';
 
 class Crop extends Component {
     render() {
         return (
-            <CropComponent show={this.props.show} onClose={() => this.props.onClose()} />
+            <CropComponent
+                source={DemoVideo}
+                show={this.props.show}
+                onClose={() => this.props.onClose()} />
         );
     }
 }

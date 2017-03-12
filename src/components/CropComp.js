@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
+import BasePlayerComp from './BasePlayerComp';
 import './crop.css';
 
 class CropComponent extends Component {
@@ -39,7 +40,14 @@ class CropComponent extends Component {
                     <Modal.Title>Modal heading</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>I think this is a modal body.</p>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-6" />
+                            <div className="col-sm-3">
+                                <BasePlayerComp sources={[this.props.source]}/>
+                            </div>
+                        </div>
+                    </div>
                 </Modal.Body>
             </Modal>
         );
@@ -47,6 +55,7 @@ class CropComponent extends Component {
 }
 
 CropComponent.propTypes = {
+    source: PropTypes.string,
     show: PropTypes.bool, // eslint-disable-line
     onClose: PropTypes.func
 };

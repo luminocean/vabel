@@ -1,9 +1,16 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import createLogger from 'redux-logger';
 import reducers from '../reducers/indexReducer';
+import * as videoActions from '../actions/videoActions';
+
+const actionsIgnoredToLog = [
+    videoActions.CONSTANTS.VIDEO_TICK
+];
 
 function reduxStore() {
-    const logger = createLogger();
+    const logger = createLogger({
+        predicate: (getState, action) => !actionsIgnoredToLog.includes(action.type)
+    });
 
     /* eslint-disable no-underscore-dangle */
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

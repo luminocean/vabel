@@ -14,6 +14,14 @@ class VideoComp extends Component {
         if (props.delegate) props.delegate(this.delegate);
     }
 
+    componentDidMount() {
+        // set timer
+        this._updateProgress();
+        setInterval(() => {
+            this._updateProgress();
+        }, 300);
+    }
+
     componentWillReceiveProps(nextProps) {
         // do playing or pausing
         if (this.videoPlayer && nextProps.playing && !this.state.playing) {
@@ -39,7 +47,7 @@ class VideoComp extends Component {
         const seek = (percentage) => {
             if (!this.videoPlayer) return;
             this.videoPlayer.currentTime = Math.floor(this.videoDuration * percentage);
-            this._updateProgressBar();
+            this._updateProgress();
         };
 
         return {
@@ -54,24 +62,38 @@ class VideoComp extends Component {
         };
     }
 
+    // make state updated with current video progress
+    // so that progress bar can also be updated
+    _updateProgress() {
+        if (this.videoPlayer && this.state.playing) {
+            const playedTime = Math.floor(this.videoPlayer.currentTime);
+            if (this.props.onProgressTick) {
+                this.props.onProgressTick(playedTime / this.videoDuration);
+            }
+        }
+    }
+
     render() {
         return (
             <video
-                id="video"
-                className="player-video"
+                className="video"
                 ref={(v) => { if (v) this.player = v; }}
                 onClick={() => this.props.onProceed(!this.state.playing)}>
-                {this.props.sources.map(src => <source key={src} src={src} />)}
+                <source src={this.props.video.src} />
             </video>
         );
     }
 }
 
 VideoComp.propTypes = {
-    sources: PropTypes.arrayOf(PropTypes.string),
+    video: PropTypes.shape({
+        src: PropTypes.string,
+        progress: PropTypes.number
+    }),
     playing: PropTypes.bool,
     delegate: PropTypes.func,
-    onProceed: PropTypes.func
+    onProceed: PropTypes.func,
+    onProgressTick: PropTypes.func
 };
 
 VideoComp.defaultProps = {

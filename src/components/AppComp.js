@@ -13,7 +13,9 @@ class AppComp extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <Crop />
+                    <div className="col-sm-4">
+                        <Crop />
+                    </div>
                 </div>
             </div>
         );

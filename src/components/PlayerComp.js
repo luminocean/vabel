@@ -1,29 +1,10 @@
 import React, { PropTypes, Component } from 'react';
-import VideoComp from './VideoComp';
+import BasicPlayerComp from './BasePlayerComp';
 import ProgressBar from './ProgressBarComp';
 import Utils from '../logic/utils';
 import './player.scss';
 
-class PlayerComp extends VideoComp {
-    componentDidMount() {
-        // set timer
-        this._updateProgressBar();
-        setInterval(() => {
-            this._updateProgressBar();
-        }, 300);
-    }
-
-    // make state updated with current video progress
-    // so that progress bar can also be updated
-    _updateProgressBar() {
-        if (this.videoPlayer && this.state.playing) {
-            const playedTime = Math.floor(this.videoPlayer.currentTime);
-            this.setState({
-                progress: playedTime / this.videoDuration
-            });
-        }
-    }
-
+class PlayerComp extends BasicPlayerComp {
     render() {
         return (
             <div>
@@ -44,13 +25,13 @@ class PlayerComp extends VideoComp {
                     {/* progress bar */}
                     <div className="col-sm-9">
                         <ProgressBar
-                            progress={this.state.progress}
+                            progress={this.props.video.progress}
                             onSeek={percentage => this.props.onSeek(percentage)} />
                     </div>
 
                     {/* timer */}
                     <div className="col-sm-1">
-                        <span className="timer">{Utils.secondsToTimeString(this.videoDuration * this.state.progress)}</span>
+                        <span className="timer">{Utils.secondsToTimeString(this.videoDuration * this.props.video.progress)}</span>
                     </div>
 
                     {/* full screen */}

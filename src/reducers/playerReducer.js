@@ -8,7 +8,7 @@ const initState = {
 
 const control = (state = initState, action) => {
     switch (action.type) {
-    case CONSTANTS.VIDEO_PLAY:
+    case CONSTANTS.PLAYER_PLAY:
         return Object.assign({}, state, {
             playing: true
         });
@@ -28,7 +28,7 @@ const control = (state = initState, action) => {
             });
         }
         // and fall-through to pause
-    case CONSTANTS.VIDEO_PAUSE: // eslint-disable-line no-fallthrough
+    case CONSTANTS.PLAYER_PAUSE: // eslint-disable-line no-fallthrough
         return Object.assign({}, state, {
             playing: false
         });
@@ -39,19 +39,19 @@ const control = (state = initState, action) => {
 
 const progress = (state = initState, action) => {
     switch (action.type) {
-    case CONSTANTS.VIDEO_SEEK:
+    case CONSTANTS.PLAYER_SEEK:
         return Object.assign({}, state, {
             toSeek: action.payload
         });
-    case CONSTANTS.VIDEO_SEEK_DONE:
+    case CONSTANTS.PLAYER_SEEK_DONE:
         return Object.assign({}, state, {
             toSeek: undefined
         });
-    case CONSTANTS.VIDEO_LEAP:
+    case CONSTANTS.PLAYER_LEAP:
         return Object.assign({}, state, {
             toLeap: action.payload
         });
-    case CONSTANTS.VIDEO_LEAP_DONE:
+    case CONSTANTS.PLAYER_LEAP_DONE:
         return Object.assign({}, state, {
             toLeap: undefined
         });

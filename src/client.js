@@ -6,6 +6,9 @@ import App from './containers/App';
 import configureStore from './stores/indexStore';
 import Keyboard from './logic/keyboard';
 
+import * as VideoActions from './actions/videoActions';
+import DemoVideo from '../videos/demo.mp4';
+
 const store = configureStore();
 
 ReactDOM.render(
@@ -17,8 +20,12 @@ ReactDOM.render(
     document.getElementById('app')
 );
 
+// setup keyboard
 const keyboard = new Keyboard(store);
 keyboard.setupListening();
+
+// load demo video
+store.dispatch(VideoActions.load(DemoVideo));
 
 if (module.hot) {
     module.hot.accept('./containers/App', () => {
