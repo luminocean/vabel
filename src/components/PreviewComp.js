@@ -29,7 +29,7 @@ class PreviewComp extends BasicPlayerComp {
         const duration = this.videoDuration;
         let progress;
         if (hard) {
-            const sampleTime = this.props.progress * duration;
+            const sampleTime = Math.floor(this.props.progress * duration);
             let startTime = sampleTime + this.props.interval;
             if (startTime < 0) startTime = 0;
 
@@ -56,13 +56,11 @@ class PreviewComp extends BasicPlayerComp {
     }
 
     _listenEvents() {
+        // save all the listeners for later cancelation
         this._listeners.set(cropActions.CONSTANTS.CROP_REPLAY, []);
         this._listeners.get(cropActions.CONSTANTS.CROP_REPLAY).push(() => {
-            if (!this.state.playing) {
-                this.play();
-            } else {
-                this.pause();
-            }
+            if (!this.state.playing) this.play();
+            else this.pause();
         });
 
         [...this._listeners.entries()].forEach((entry) => {

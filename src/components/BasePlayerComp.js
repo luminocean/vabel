@@ -1,11 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import uuid from 'uuid/v4';
 
 class BasePlayerComp extends Component {
     constructor(props) {
         super(props);
         this.mounted = false;
-        this.uuid = uuid();
 
         this.videoPlayer = null;
         this.videoDuration = 0; // in seconds
@@ -19,7 +17,6 @@ class BasePlayerComp extends Component {
     }
 
     componentDidMount() {
-        console.log(`mounted ${this.uuid}`);
         this.mounted = true;
         // set timer
         this._updateProgress();
@@ -29,7 +26,6 @@ class BasePlayerComp extends Component {
     }
 
     componentWillUnmount() {
-        console.log(`unmounted ${this.uuid}`);
         this.mounted = false;
         if (this.updatingInterval) {
             clearInterval(this.updatingInterval);
@@ -39,7 +35,7 @@ class BasePlayerComp extends Component {
 
     setState(state) {
         if (this.mounted) super.setState(state);
-        else console.error('setState on unmounted component!');
+        else console.error('setState on unmounted component!'); // eslint-disable-line
     }
 
     play() {

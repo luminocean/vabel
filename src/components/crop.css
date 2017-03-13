@@ -2,3 +2,7 @@
     color: black;
     width: 75%; /* leave a width of 9 */
 }
+
+.text-area {
+    height: 400px;
+}

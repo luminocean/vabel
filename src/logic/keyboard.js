@@ -9,7 +9,9 @@ const KeyCodes = {
     GREATER: 46,
     LESS: 44,
     C: 99,
-    R: 114
+    c: 67,
+    R: 114,
+    r: 82
 };
 
 export default class Keyboard {
@@ -27,7 +29,9 @@ export default class Keyboard {
             case KeyCodes.SPACE: this._pauseOrPlay(); break;
             case KeyCodes.LESS: this._leap(false); break;
             case KeyCodes.GREATER: this._leap(true); break;
+            case KeyCodes.c:
             case KeyCodes.C: this._crop(); break;
+            case KeyCodes.r:
             case KeyCodes.R: this._cropReplay(); break;
             default:
                 console.log(`Unhandled key pressed: ${ev.keyCode}`); // eslint-disable-line
@@ -62,11 +66,8 @@ export default class Keyboard {
     _pauseOrPlay() { // eslint-disable-line consistent-return
         if (!this._check('play') || !this._check('pause')) return;
         const playing = this.state.player.control.playing;
-        if (playing) {
-            this._pause();
-        } else {
-            this._play();
-        }
+        if (playing) this._pause();
+        else this._play();
     }
 
     _play() {
