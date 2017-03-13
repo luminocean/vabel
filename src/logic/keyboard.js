@@ -44,10 +44,6 @@ export default class Keyboard {
             cropActions.cropDone() : cropActions.crop());
     }
 
-    _leap(direction) {
-        this._dispatch(playerActions.leap(direction));
-    }
-
     _pauseOrPlay() {
         const playing = this.state.player.control.playing;
         this._dispatch(playing ? playerActions.pause() : playerActions.play());
@@ -62,6 +58,10 @@ export default class Keyboard {
      */
     _cropReplay() { // eslint-disable-line class-methods-use-this
         eventCenter.emit(cropActions.CONSTANTS.CROP_REPLAY);
+    }
+
+    _leap(direction) { // eslint-disable-line class-methods-use-this
+        eventCenter.emit(playerActions.CONSTANTS.PLAYER_LEAP, direction);
     }
 }
 

@@ -1,31 +1,39 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import PlayerComponent from '../components/PlayerComp';
-import * as actions from '../actions/playerActions';
+import * as playerActions from '../actions/playerActions';
 import * as videoActions from '../actions/videoActions';
+import eventCenter from '../logic/eventCenter';
+
 
 class Player extends Component {
-    componentWillReceiveProps(nextProps) {
-        // toSeek property is used to control player video progress
-        if (nextProps.toSeek) {
-            this.component.seek(nextProps.toSeek);
-            this.props.seekDone();
-        } else if (nextProps.toLeap !== undefined) {
-            this.component.leap(nextProps.toLeap);
-            this.props.leapDone();
-        }
+    // no need to go through redux store,
+    // just handle it locally
+    onSeek(percentage) {
+        this.component.seek(percentage);
     }
 
+    toLeap(direction) {
+        this.component.leap(direction);
+    }
+
+    set delegate(comp) {
+        if (comp) {
+            this.component = comp;
+            eventCenter.addListener(playerActions.CONSTANTS.PLAYER_LEAP,
+                direction => this.toLeap(direction));
+        }
+    }
     render() {
         return (
             <div>
                 <PlayerComponent
-                    delegate={(delegate) => { this.component = delegate; }}
+                    delegate={(delegate) => { this.delegate = delegate; }}
                     src={this.props.video.src}
                     progress={this.props.video.progress}
                     playing={this.props.playing}
                     onProceed={this.props.onProceed}
-                    onSeek={this.props.onSeek}
+                    onSeek={percentage => this.onSeek(percentage)}
                     onProgressTick={this.props.onProgressTick}/>
             </div>
         );
@@ -38,19 +46,12 @@ Player.propTypes = {
         progress: PropTypes.number
     }),
     playing: PropTypes.bool,
-    toSeek: PropTypes.number, // eslint-disable-line
-    toLeap: PropTypes.bool, // eslint-disable-line
-    seekDone: PropTypes.func,
-    leapDone: PropTypes.func,
     onProceed: PropTypes.func,
-    onSeek: PropTypes.func,
     onProgressTick: PropTypes.func
 };
 
 const mapStateToProps = state => ({
     playing: state.player.control.playing,
-    toSeek: state.player.progress.toSeek,
-    toLeap: state.player.progress.toLeap,
     video: state.video
 });
 
@@ -58,13 +59,10 @@ const mapDispatchToProps = (dispatch) => {
     const actionProps = {
         // user choose to proceed playing video or not
         onProceed: (proceed) => {
-            if (proceed) dispatch(actions.play());
-            else dispatch(actions.pause());
+            if (proceed) dispatch(playerActions.play());
+            else dispatch(playerActions.pause());
         },
-        onProgressTick: progress => dispatch(videoActions.tick(progress)),
-        onSeek: percentage => dispatch(actions.seek(percentage)),
-        seekDone: () => dispatch(actions.seekDone()),
-        leapDone: () => dispatch(actions.leapDone()),
+        onProgressTick: progress => dispatch(videoActions.tick(progress))
     };
     return actionProps;
 };
