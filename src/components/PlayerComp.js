@@ -2,9 +2,21 @@ import React, { PropTypes } from 'react';
 import BasicPlayerComp from './BasePlayerComp';
 import ProgressBar from './ProgressBarComp';
 import Utils from '../logic/utils';
+import eventCenter from '../logic/eventCenter';
+import * as playerActions from '../actions/playerActions';
 import './player.scss';
 
 class PlayerComp extends BasicPlayerComp {
+    loaded() {
+        super.loaded();
+        this._setupEventListeners();
+    }
+
+    _setupEventListeners() {
+        eventCenter.addListener(playerActions.CONSTANTS.PLAYER_PLAY, () => this.play());
+        eventCenter.addListener(playerActions.CONSTANTS.PLAYER_PAUSE, () => this.pause());
+    }
+
     render() {
         return (
             <div className="row">

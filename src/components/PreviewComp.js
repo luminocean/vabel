@@ -6,6 +6,7 @@ import * as cropActions from '../actions/cropActions';
 class PreviewComp extends BasicPlayerComp {
     constructor(props) {
         super(props);
+        this._listeners = new Map();
 
         this.state = {
             startTime: 0,
@@ -17,7 +18,11 @@ class PreviewComp extends BasicPlayerComp {
     loaded() {
         super.loaded();
         this.reset();
-        this._setupEventListeners();
+        this._listenEvents();
+    }
+
+    componentWillUnmount() {
+        this._cancelEvents();
     }
 
     reset() {
@@ -37,13 +42,28 @@ class PreviewComp extends BasicPlayerComp {
         super.play();
     }
 
-    _setupEventListeners() {
-        eventCenter.addListener(cropActions.CONSTANTS.CROP_REPLAY, () => {
+    _cancelEvents() {
+        [...this._listeners.entries()].forEach((entry) => {
+            const key = entry[0];
+            const listeners = entry[1];
+            listeners.forEach(listener => eventCenter.removeListener(key, listener));
+        });
+    }
+
+    _listenEvents() {
+        this._listeners.set(cropActions.CONSTANTS.CROP_REPLAY, []);
+        this._listeners.get(cropActions.CONSTANTS.CROP_REPLAY).push(() => {
             if (!this.state.playing) {
                 this.play();
             } else {
                 this.pause();
             }
+        });
+
+        [...this._listeners.entries()].forEach((entry) => {
+            const key = entry[0];
+            const listeners = entry[1];
+            listeners.forEach(listener => eventCenter.addListener(key, listener));
         });
     }
 

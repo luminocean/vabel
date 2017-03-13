@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { CONSTANTS } from '../actions/playerActions';
-import { CONSTANTS as CROP_CONSTANTS } from '../actions/cropActions';
 
 const initState = {
     videoExists: true
@@ -12,23 +11,7 @@ const control = (state = initState, action) => {
         return Object.assign({}, state, {
             playing: true
         });
-    case CROP_CONSTANTS.CROP_DONE: // eslint-disable-line no-case-declarations
-        // recover play status
-        state = Object.assign({}, state, { // eslint-disable-line no-param-reassign
-            playing: state.savedPlaying
-        });
-        return Object.assign({}, state, {
-            savedPlaying: undefined
-        });
-    case CROP_CONSTANTS.CROP:
-        // when croping, save current play status
-        if (state.savedPlaying === undefined) { // prevent overwriting
-            state = Object.assign({}, state, { // eslint-disable-line no-param-reassign
-                savedPlaying: state.playing
-            });
-        }
-        // and fall-through to pause
-    case CONSTANTS.PLAYER_PAUSE: // eslint-disable-line no-fallthrough
+    case CONSTANTS.PLAYER_PAUSE:
         return Object.assign({}, state, {
             playing: false
         });

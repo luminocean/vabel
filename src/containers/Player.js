@@ -31,7 +31,6 @@ class Player extends Component {
                     delegate={(delegate) => { this.delegate = delegate; }}
                     src={this.props.video.src}
                     progress={this.props.video.progress}
-                    playing={this.props.playing}
                     onProceed={this.props.onProceed}
                     onSeek={percentage => this.onSeek(percentage)}
                     onProgressTick={this.props.onProgressTick}/>
@@ -45,13 +44,11 @@ Player.propTypes = {
         src: PropTypes.string,
         progress: PropTypes.number
     }),
-    playing: PropTypes.bool,
     onProceed: PropTypes.func,
     onProgressTick: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-    playing: state.player.control.playing,
     video: state.video
 });
 

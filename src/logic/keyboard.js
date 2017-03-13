@@ -59,27 +59,50 @@ export default class Keyboard {
         console.error('Unknown policy key'); // eslint-disable-line no-console
     }
 
-    /**
-     * Go through redux store
-     */
-    _crop() {
-        this._dispatch(this.state.crop.control.croping ?
-            cropActions.cropDone() : cropActions.crop());
-    }
-
     _pauseOrPlay() { // eslint-disable-line consistent-return
         if (!this._check('play') || !this._check('pause')) return;
         const playing = this.state.player.control.playing;
-        this._dispatch(playing ? playerActions.pause() : playerActions.play());
+        if (playing) {
+            this._pause();
+        } else {
+            this._play();
+        }
     }
 
+    _play() {
+        this._dispatch(playerActions.play());
+        eventCenter.emit(playerActions.CONSTANTS.PLAYER_PLAY);
+    }
+
+    _pause() {
+        // register to redux store without any side affects
+        this._dispatch(playerActions.pause());
+        // call the player to play
+        eventCenter.emit(playerActions.CONSTANTS.PLAYER_PAUSE);
+    }
+
+    _crop() {
+        if (this.state.crop.control.croping) {
+            this._dispatch(cropActions.cropDone());
+        } else {
+            // need to pause player while croping
+            this._pause();
+            // register (which will cause modal to show)
+            this._dispatch(cropActions.crop());
+        }
+    }
+
+    /**
+     * Go through redux store only
+     */
     _dispatch(action) {
         this.store.dispatch(action);
     }
 
     /**
-     * Go through event emitter
+     * Go through event emitter only
      */
+
     _cropReplay() { // eslint-disable-line class-methods-use-this
         if (!this._check('crop_replay')) return;
         eventCenter.emit(cropActions.CONSTANTS.CROP_REPLAY);

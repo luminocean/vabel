@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import PreviewComp from './PreviewComp';
-
+import uuid from 'uuid/v4';
 import './crop.css';
 
 class CropComponent extends Component {
@@ -12,6 +12,12 @@ class CropComponent extends Component {
             startTime: 0, // in seconds
             endTime: 0 // in seconds
         };
+
+        this.uuid = uuid();
+    }
+
+    componentDidMount() {
+        console.log(`CropComp mounted: ${this.uuid}`);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -22,6 +28,10 @@ class CropComponent extends Component {
         } else if (nextProps.show === false) {
             this.setState({showModal: false});
         }
+    }
+
+    componentWillUnmount() {
+        console.log(`CropComp unmounted: ${this.uuid}`);
     }
 
     close() {

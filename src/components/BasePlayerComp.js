@@ -1,8 +1,12 @@
 import React, { PropTypes, Component } from 'react';
+import uuid from 'uuid/v4';
 
 class BasePlayerComp extends Component {
     constructor(props) {
         super(props);
+        this.mounted = false;
+        this.uuid = uuid();
+
         this.videoPlayer = null;
         this.videoDuration = 0; // in seconds
         this.leapPercentage = 0.01;
@@ -15,20 +19,27 @@ class BasePlayerComp extends Component {
     }
 
     componentDidMount() {
+        console.log(`mounted ${this.uuid}`);
+        this.mounted = true;
         // set timer
         this._updateProgress();
-        setInterval(() => {
+        this.updatingInterval = setInterval(() => {
             this._updateProgress();
         }, 300);
     }
 
-    componentWillReceiveProps(nextProps) {
-        // do playing or pausing
-        if (this.videoPlayer && nextProps.playing && !this.state.playing) {
-            this.play();
-        } else if (this.videoPlayer && !nextProps.playing && this.props.playing) {
-            this.pause();
+    componentWillUnmount() {
+        console.log(`unmounted ${this.uuid}`);
+        this.mounted = false;
+        if (this.updatingInterval) {
+            clearInterval(this.updatingInterval);
+            this.updatingInterval = null;
         }
+    }
+
+    setState(state) {
+        if (this.mounted) super.setState(state);
+        else console.error('setState on unmounted component!');
     }
 
     play() {
@@ -113,14 +124,12 @@ class BasePlayerComp extends Component {
 BasePlayerComp.propTypes = {
     src: PropTypes.string,
     progress: PropTypes.number,
-    playing: PropTypes.bool,
     delegate: PropTypes.func,
     onProceed: PropTypes.func,
     onProgressTick: PropTypes.func
 };
 
 BasePlayerComp.defaultProps = {
-    playing: false,
     progress: 0
 };
 
