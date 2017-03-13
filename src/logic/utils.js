@@ -9,6 +9,16 @@ function secondsToTimeString(seconds) {
     return `${leftpad(minutes.toString(), 2, '0')}:${leftpad(secs.toString(), 2, '0')}`;
 }
 
+function getRootFontWidth(char) {
+    const testElement = document.createElement('span');
+    testElement.innerText = Array(100).fill(char).join('');
+    document.body.appendChild(testElement);
+    const charWidth = testElement.offsetWidth / 100;
+    testElement.parentNode.removeChild(testElement);
+    return charWidth;
+}
+
 export default {
-    secondsToTimeString
+    secondsToTimeString,
+    getRootFontWidth
 };
