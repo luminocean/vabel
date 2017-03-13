@@ -2,8 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import CropComponent from '../components/CropComp';
 import * as actions from '../actions/cropActions';
+import eventCenter from '../logic/eventCenter';
 
 class Crop extends Component {
+    onEditing(toEdit) { // eslint-disable-line
+        console.info(`${toEdit ? 'Enter' : 'Exit'} editing mode`);
+        eventCenter.emit(toEdit ?
+            actions.CONSTANTS.CROP_ENTER_EDITING : actions.CONSTANTS.CROP_EXIT_EDITING);
+    }
+
     render() {
         return (
             <CropComponent
@@ -11,7 +18,8 @@ class Crop extends Component {
                 interval={-10}
                 progress={this.props.video.progress}
                 show={this.props.show}
-                onClose={() => this.props.onClose()}/>
+                onClose={() => this.props.onClose()}
+                onEditing={toEdit => this.onEditing(toEdit)}/>
         );
     }
 }
@@ -31,7 +39,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({ // eslint-disable-line no-unused-vars
-    onClose: () => dispatch(actions.cropDone()),
+    onClose: () => dispatch(actions.cropDone())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Crop);

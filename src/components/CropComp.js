@@ -44,7 +44,10 @@ class CropComponent extends Component {
                         <div className="row">
                             <div className="col-sm-6">
                                 <div className="row">
-                                    <textarea className="text-area col-sm-12" />
+                                    <textarea
+                                        className="text-area col-sm-12"
+                                        onFocus={() => this.props.onEditing(true)}
+                                        onBlur={() => this.props.onEditing(false)}/>
                                 </div>
                             </div>
                             <div className="col-sm-1" />
@@ -77,7 +80,8 @@ CropComponent.propTypes = {
     progress: PropTypes.number,
     interval: PropTypes.number,
     show: PropTypes.bool, // eslint-disable-line
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    onEditing: PropTypes.func
 };
 
 export default CropComponent;

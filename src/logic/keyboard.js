@@ -17,6 +17,7 @@ const KeyCodes = {
 export default class Keyboard {
     constructor(store) {
         this.store = store;
+        this.acceptCommands = true;
     }
 
     get state() {
@@ -25,19 +26,26 @@ export default class Keyboard {
 
     setupListening() {
         window.onkeypress = (ev) => {
-            switch (ev.keyCode) {
-            case KeyCodes.SPACE: this._pauseOrPlay(); break;
-            case KeyCodes.LESS: this._leap(false); break;
-            case KeyCodes.GREATER: this._leap(true); break;
-            case KeyCodes.c:
-            case KeyCodes.C: this._crop(); break;
-            case KeyCodes.r:
-            case KeyCodes.R: this._cropReplay(); break;
-            default:
-                console.log(`Unhandled key pressed: ${ev.keyCode}`); // eslint-disable-line
-                break;
+            if (this.acceptCommands) {
+                switch (ev.keyCode) {
+                case KeyCodes.SPACE: this._pauseOrPlay(); break;
+                case KeyCodes.LESS: this._leap(false); break;
+                case KeyCodes.GREATER: this._leap(true); break;
+                case KeyCodes.c:
+                case KeyCodes.C: this._crop(); break;
+                case KeyCodes.r:
+                case KeyCodes.R: this._cropReplay(); break;
+                default:
+                    console.log(`Unhandled key pressed: ${ev.keyCode}`); // eslint-disable-line
+                    break;
+                }
             }
         };
+
+        eventCenter.on(cropActions.CONSTANTS.CROP_ENTER_EDITING,
+            () => { this.acceptCommands = false; });
+        eventCenter.on(cropActions.CONSTANTS.CROP_EXIT_EDITING,
+            () => { this.acceptCommands = true; });
     }
 
     get allowPolicy() {
@@ -114,5 +122,3 @@ export default class Keyboard {
         eventCenter.emit(playerActions.CONSTANTS.PLAYER_LEAP, direction);
     }
 }
-
-
