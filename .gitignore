@@ -36,4 +36,4 @@ dist/
 .idea/
 .vscode/
 
-videos/
+videos/**/*.mp4
