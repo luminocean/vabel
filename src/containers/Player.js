@@ -21,7 +21,8 @@ class Player extends Component {
             <div>
                 <PlayerComponent
                     delegate={(delegate) => { this.component = delegate; }}
-                    video={this.props.video}
+                    src={this.props.video.src}
+                    progress={this.props.video.progress}
                     playing={this.props.playing}
                     onProceed={this.props.onProceed}
                     onSeek={this.props.onSeek}

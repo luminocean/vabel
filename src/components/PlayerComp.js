@@ -25,13 +25,13 @@ class PlayerComp extends BasicPlayerComp {
                     {/* progress bar */}
                     <div className="col-sm-9">
                         <ProgressBar
-                            progress={this.props.video.progress}
+                            progress={this.props.progress}
                             onSeek={percentage => this.props.onSeek(percentage)} />
                     </div>
 
                     {/* timer */}
                     <div className="col-sm-1">
-                        <span className="timer">{Utils.secondsToTimeString(this.videoDuration * this.props.video.progress)}</span>
+                        <span className="timer">{Utils.secondsToTimeString(this.videoDuration * this.props.progress)}</span>
                     </div>
 
                     {/* full screen */}

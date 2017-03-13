@@ -46,7 +46,7 @@ class CropComponent extends Component {
                             <div className="col-sm-4">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <BasePlayerComp video={this.props.video}/>
+                                        <BasePlayerComp src={this.props.video.src} progress={this.props.video.progress} />
                                     </div>
                                 </div>
                                 <div className="row">
@@ -56,7 +56,7 @@ class CropComponent extends Component {
                                     <div className="col-sm-5">
                                         <span className="glyphicon glyphicon-repeat" aria-hidden="true"/>
                                     </div>
-                                    <div className="col-sm-2">
+                                    <div className="col-sm-2c">
                                         0s
                                     </div>
                                 </div>

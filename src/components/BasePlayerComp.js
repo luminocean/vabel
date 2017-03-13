@@ -40,7 +40,7 @@ class BasePlayerComp extends Component {
         this.videoPlayer = ele;
         ele.ondurationchange = () => {
             this.videoDuration = ele.duration;
-            this.videoPlayer.currentTime = this.props.video.progress * ele.duration;
+            this.videoPlayer.currentTime = this.props.progress * ele.duration;
         };
     }
 
@@ -80,17 +80,15 @@ class BasePlayerComp extends Component {
                 className="video"
                 ref={(v) => { if (v) this.player = v; }}
                 onClick={() => this.props.onProceed(!this.state.playing)}>
-                <source src={this.props.video.src} />
+                <source src={this.props.src} />
             </video>
         );
     }
 }
 
 BasePlayerComp.propTypes = {
-    video: PropTypes.shape({
-        src: PropTypes.string,
-        progress: PropTypes.number
-    }),
+    src: PropTypes.string,
+    progress: PropTypes.number,
     playing: PropTypes.bool,
     delegate: PropTypes.func,
     onProceed: PropTypes.func,
