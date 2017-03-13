@@ -11,7 +11,15 @@ const KeyCodes = {
     C: 99,
     c: 67,
     R: 114,
-    r: 82
+    r: 82,
+    Q: 81,
+    q: 113,
+    W: 87,
+    w: 119,
+    O: 79,
+    o: 111,
+    P: 80,
+    p: 112
 };
 
 export default class Keyboard {
@@ -31,10 +39,18 @@ export default class Keyboard {
                 case KeyCodes.SPACE: this._pauseOrPlay(); break;
                 case KeyCodes.LESS: this._leap(false); break;
                 case KeyCodes.GREATER: this._leap(true); break;
-                case KeyCodes.c:
-                case KeyCodes.C: this._crop(); break;
-                case KeyCodes.r:
-                case KeyCodes.R: this._cropReplay(); break;
+                case KeyCodes.C:
+                case KeyCodes.c: this._crop(); break;
+                case KeyCodes.R:
+                case KeyCodes.r: this._cropReplay(); break;
+                case KeyCodes.Q:
+                case KeyCodes.q: this._cropAdjust('start', false); break;
+                case KeyCodes.W:
+                case KeyCodes.w: this._cropAdjust('start', true); break;
+                case KeyCodes.O:
+                case KeyCodes.o: this._cropAdjust('end', false); break;
+                case KeyCodes.P:
+                case KeyCodes.p: this._cropAdjust('end', true); break;
                 default:
                     console.log(`Unhandled key pressed: ${ev.keyCode}`); // eslint-disable-line
                     break;
@@ -53,7 +69,8 @@ export default class Keyboard {
             play: !this.state.crop.control.croping,
             pause: 'play', // reuse
             leap: 'play',
-            crop_replay: this.state.crop.control.croping
+            crop_replay: this.state.crop.control.croping,
+            crop_adjust: this.state.crop.control.croping
         };
     }
 
@@ -120,5 +137,10 @@ export default class Keyboard {
     _leap(direction) { // eslint-disable-line class-methods-use-this
         if (!this._check('leap')) return;
         eventCenter.emit(playerActions.CONSTANTS.PLAYER_LEAP, direction);
+    }
+
+    _cropAdjust(type, increase) {
+        if (!this._check('crop_adjust')) return;
+        eventCenter.emit(cropActions.CONSTANTS.CROP_ADJUST, type, increase ? 1 : -1);
     }
 }

@@ -58,11 +58,17 @@ class PreviewComp extends BasicPlayerComp {
     _listenEvents() {
         // save all the listeners for later cancelation
         this._listeners.set(cropActions.CONSTANTS.CROP_REPLAY, []);
+        this._listeners.set(cropActions.CONSTANTS.CROP_ADJUST, []);
+
         this._listeners.get(cropActions.CONSTANTS.CROP_REPLAY).push(() => {
             if (!this.state.playing) this.play();
             else this.pause();
         });
+        this._listeners.get(cropActions.CONSTANTS.CROP_ADJUST).push((type, delta) => {
+            this._adjustTimeRange(type, delta);
+        });
 
+        // set listening all at once
         [...this._listeners.entries()].forEach((entry) => {
             const key = entry[0];
             const listeners = entry[1];
