@@ -17,7 +17,7 @@ class PreviewComp extends BasicPlayerComp {
 
     loaded() {
         super.loaded();
-        this.reset();
+        this.reset(true);
         this._listenEvents();
     }
 
@@ -25,16 +25,21 @@ class PreviewComp extends BasicPlayerComp {
         this._cancelEvents();
     }
 
-    reset() {
+    reset(hard) {
         const duration = this.videoDuration;
-        const sampleTime = this.props.progress * duration;
-        let startTime = sampleTime + this.props.interval;
-        if (startTime < 0) startTime = 0;
+        let progress;
+        if (hard) {
+            const sampleTime = this.props.progress * duration;
+            let startTime = sampleTime + this.props.interval;
+            if (startTime < 0) startTime = 0;
 
-        const endTime = sampleTime;
-        const progress = startTime / duration;
+            const endTime = sampleTime;
+            progress = startTime / duration;
+            this.setState({sampleTime, startTime, endTime, progress});
+        } else {
+            progress = this.state.startTime / duration;
+        }
         this.seek(progress);
-        this.setState({sampleTime, startTime, endTime, progress});
     }
 
     play() {
@@ -77,6 +82,16 @@ class PreviewComp extends BasicPlayerComp {
         }
     }
 
+    _adjustTimeRange(type, delta) {
+        // type is start or end
+        const newTime = this.state[`${type}Time`] + delta;
+        const newStatePartial = {};
+        newStatePartial[`${type}Time`] = newTime;
+        this.setState(newStatePartial);
+
+        if (this.videoPlayer) this.videoPlayer.currentTime = newTime;
+    }
+
     render() {
         return (
             <div className="preview-player row">
@@ -86,7 +101,13 @@ class PreviewComp extends BasicPlayerComp {
 
                 <div className="row">
                     <div className="col-sm-5">
-                        {this.state.startTime - this.state.sampleTime}s
+                        <span
+                            className="glyphicon glyphicon-chevron-left"
+                            onClick={() => this._adjustTimeRange('start', -1)} />
+                        &nbsp;{this.state.startTime - this.state.sampleTime}s&nbsp;
+                        <span
+                            className="glyphicon glyphicon-chevron-right"
+                            onClick={() => this._adjustTimeRange('start', 1)}/>
                     </div>
                     <div className="col-sm-5">
                         <span
@@ -94,7 +115,13 @@ class PreviewComp extends BasicPlayerComp {
                             onClick={() => this.play()}/>
                     </div>
                     <div className="col-sm-2c">
-                        {this.state.endTime - this.state.sampleTime}s
+                        <span
+                            className="glyphicon glyphicon-chevron-left"
+                            onClick={() => this._adjustTimeRange('end', -1)} />
+                        &nbsp;{this.state.endTime - this.state.sampleTime}s&nbsp;
+                        <span
+                            className="glyphicon glyphicon-chevron-right"
+                            onClick={() => this._adjustTimeRange('end', 1)}/>
                     </div>
                 </div>
             </div>
@@ -103,7 +130,7 @@ class PreviewComp extends BasicPlayerComp {
 }
 
 PreviewComp.propTypes = {
-    interval: PropTypes.number
+    interval: PropTypes.number // initial crop interval
 };
 
 export default PreviewComp;
