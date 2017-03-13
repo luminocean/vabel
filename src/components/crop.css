@@ -5,4 +5,9 @@
 
 .text-area {
     height: 400px;
+    font-size: 2em;
+}
+
+.leap-indicator {
+    padding: 0 5px 0 5px;
 }

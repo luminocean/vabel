@@ -92,9 +92,11 @@ class PreviewComp extends BasicPlayerComp {
 
     render() {
         return (
-            <div className="preview-player row">
+            <div className="preview-player">
                 <div className="row">
-                    {super.render()}
+                    <div className="col-sm-12">
+                        {super.render()}
+                    </div>
                 </div>
 
                 <div className="row">
@@ -102,21 +104,21 @@ class PreviewComp extends BasicPlayerComp {
                         <span
                             className="glyphicon glyphicon-chevron-left"
                             onClick={() => this._adjustTimeRange('start', -1)} />
-                        &nbsp;{this.state.startTime - this.state.sampleTime}s&nbsp;
+                        <span className="leap-indicator">{this.state.startTime - this.state.sampleTime}s</span>
                         <span
                             className="glyphicon glyphicon-chevron-right"
                             onClick={() => this._adjustTimeRange('start', 1)}/>
                     </div>
-                    <div className="col-sm-5">
+                    <div className="col-sm-4">
                         <span
                             className="glyphicon glyphicon-repeat"
                             onClick={() => this.play()}/>
                     </div>
-                    <div className="col-sm-2c">
+                    <div className="col-sm-3">
                         <span
                             className="glyphicon glyphicon-chevron-left"
                             onClick={() => this._adjustTimeRange('end', -1)} />
-                        &nbsp;{this.state.endTime - this.state.sampleTime}s&nbsp;
+                        <span className="leap-indicator">{this.state.endTime - this.state.sampleTime}s</span>
                         <span
                             className="glyphicon glyphicon-chevron-right"
                             onClick={() => this._adjustTimeRange('end', 1)}/>

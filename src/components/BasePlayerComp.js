@@ -65,6 +65,9 @@ class BasePlayerComp extends Component {
                 this.videoPlayer.currentTime = this.props.progress;
             }
 
+            this.setState({
+                loaded: true
+            });
             this.loaded();
         };
     }
@@ -107,12 +110,16 @@ class BasePlayerComp extends Component {
 
     render() {
         return (
-            <video
-                className="video"
-                ref={(v) => { if (v) this.player = v; }}
-                onClick={() => this.props.onProceed(!this.state.playing)}>
-                <source src={this.props.src} />
-            </video>
+            <div>
+                <h3 hidden={!!this.state.loaded}>Video Loading...</h3>
+                <video
+                    hidden={!this.state.loaded}
+                    className="video"
+                    ref={(v) => { if (v) this.player = v; }}
+                    onClick={() => this.props.onProceed(!this.state.playing)}>
+                    <source src={this.props.src} />
+                </video>
+            </div>
         );
     }
 }

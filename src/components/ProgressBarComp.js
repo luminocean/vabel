@@ -25,7 +25,7 @@ class ProgressBarComp extends Component {
         const rightPadding = getComputedStyle(container).paddingRight.match(/(\d+)/)[1];
 
         const barWidth = container.offsetWidth - leftPadding - rightPadding;
-        const charWidth = Util.getRootFontWidth('|');
+        const charWidth = Util.getRootFontWidth(this.bar, '|');
 
         setTimeout(() => {
             this.setState({
@@ -38,7 +38,7 @@ class ProgressBarComp extends Component {
         const indexes = [];
         for (let i = 0; i < this.state.barCount; i += 1) indexes.push(i);
         return (
-            <span className="video-progress-bar" ref={(bar) => { this.bar = bar; }}>
+            <span className="player-progress-bar" ref={(bar) => { this.bar = bar; }}>
                 {indexes.map(i => (
                     <span
                         key={i}

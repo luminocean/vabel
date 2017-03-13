@@ -11,12 +11,9 @@ class AppComp extends React.Component {
                     <div className="col-sm-8">
                         <Player />
                     </div>
+                    <div className="col-sm-4"/>
                 </div>
-                <div className="row">
-                    <div className="col-sm-4">
-                        <Crop />
-                    </div>
-                </div>
+                <Crop />
             </div>
         );
     }

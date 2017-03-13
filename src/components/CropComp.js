@@ -40,33 +40,34 @@ class CropComponent extends Component {
                     <Modal.Title>Modal heading</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-sm-6">
-                                <div className="row">
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <div className="row">
+                                <div className="col-sm-12">
                                     <textarea
-                                        className="text-area col-sm-12"
+                                        className="text-area"
+                                        style={{width: '100%'}}
                                         onFocus={() => this.props.onEditing(true)}
                                         onBlur={() => this.props.onEditing(false)}/>
                                 </div>
                             </div>
-                            <div className="col-sm-1" />
-                            <div className="col-sm-5">
-                                <PreviewComp
-                                    src={this.props.src}
-                                    progress={this.props.progress}
-                                    interval={this.props.interval}/>
-                            </div>
+                        </div>
+                        <div className="col-sm-6">
+                            <PreviewComp
+                                src={this.props.src}
+                                progress={this.props.progress}
+                                interval={this.props.interval}/>
                         </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-sm-11"/>
-                            <div className="col-sm-1">
-                                <Button onClick={() => this.close()}>Close</Button>
-                            </div>
+                    <div className="row">
+                        <div className="col-sm-9"/>
+                        <div className="col-sm-1">
+                            <Button bsStyle="success" onClick={() => {}}>SAVE</Button>
+                        </div>
+                        <div className="col-sm-1">
+                            <Button onClick={() => this.close()}>CANCEL</Button>
                         </div>
                     </div>
                 </Modal.Footer>
