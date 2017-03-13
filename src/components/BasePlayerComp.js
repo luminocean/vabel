@@ -8,7 +8,7 @@ class BasePlayerComp extends Component {
         this.leapPercentage = 0.01;
         this.state = {
             playing: false,
-            progress: 0, // in percentage
+            progress: undefined, // in percentage
         };
 
         if (props.delegate) props.delegate(this.delegate);
@@ -25,40 +25,61 @@ class BasePlayerComp extends Component {
     componentWillReceiveProps(nextProps) {
         // do playing or pausing
         if (this.videoPlayer && nextProps.playing && !this.state.playing) {
-            this.setState({playing: true});
-            this.videoPlayer.play();
+            this.play();
         } else if (this.videoPlayer && !nextProps.playing && this.props.playing) {
-            this.setState({playing: false});
-            this.videoPlayer.pause();
+            this.pause();
         }
+    }
+
+    play() {
+        this.setState({playing: true});
+        this.videoPlayer.play();
+    }
+
+    get isPlaying() {
+        return this.videoPlayer && this.state.playing;
+    }
+
+    pause() {
+        this.setState({playing: false});
+        this.videoPlayer.pause();
     }
 
     set player(videoElemement) {
         const ele = videoElemement;
         if (!ele) return; // videoElemement might be undefined
 
-        this.videoPlayer = ele;
         ele.ondurationchange = () => {
+            this.videoPlayer = ele;
             this.videoDuration = ele.duration;
-            this.videoPlayer.currentTime = this.props.progress * ele.duration;
+            if (this.state.progress !== undefined) {
+                this.videoPlayer.currentTime = this.state.progress;
+            } else {
+                this.videoPlayer.currentTime = this.props.progress;
+            }
+
+            this.loaded();
         };
     }
 
-    get delegate() {
-        const seek = (percentage) => {
-            if (!this.videoPlayer) return;
-            this.videoPlayer.currentTime = Math.floor(this.videoDuration * percentage);
-            this._updateProgress();
-        };
+    // a hook for descendants when video is loaded
+    loaded() {} // eslint-disable-line class-methods-use-this
 
+    seek(percentage) {
+        if (!this.videoPlayer) return;
+        this.videoPlayer.currentTime = Math.floor(this.videoDuration * percentage);
+        this._updateProgress();
+    }
+
+    get delegate() {
         return {
             seek: (percentage) => {
-                seek(percentage);
+                this.seek(percentage);
             },
             leap: (direction) => {
                 let progress = this.state.progress;
                 progress += this.leapPercentage * (direction ? 1 : -1);
-                seek(progress);
+                this.seek(progress);
             }
         };
     }
@@ -66,10 +87,13 @@ class BasePlayerComp extends Component {
     // make state updated with current video progress
     // so that progress bar can also be updated
     _updateProgress() {
-        if (this.videoPlayer && this.state.playing) {
+        if (this.isPlaying) {
             const playedTime = Math.floor(this.videoPlayer.currentTime);
+            const progress = playedTime / this.videoDuration;
+            this.setState({progress});
+
             if (this.props.onProgressTick) {
-                this.props.onProgressTick(playedTime / this.videoDuration);
+                this.props.onProgressTick(progress);
             }
         }
     }
@@ -96,7 +120,8 @@ BasePlayerComp.propTypes = {
 };
 
 BasePlayerComp.defaultProps = {
-    playing: false
+    playing: false,
+    progress: 0
 };
 
 export default BasePlayerComp;

@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import BasicPlayerComp from './BasePlayerComp';
 import ProgressBar from './ProgressBarComp';
 import Utils from '../logic/utils';
@@ -7,7 +7,7 @@ import './player.scss';
 class PlayerComp extends BasicPlayerComp {
     render() {
         return (
-            <div>
+            <div className="row">
                 {/* video */}
                 {super.render()}
 

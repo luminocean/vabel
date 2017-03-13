@@ -2,13 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import CropComponent from '../components/CropComp';
 import * as actions from '../actions/cropActions';
-import DemoVideo from '../../videos/demo.mp4';
 
 class Crop extends Component {
     render() {
         return (
             <CropComponent
-                video={this.props.video}
+                src={this.props.video.src}
+                interval={-10}
+                progress={this.props.video.progress}
                 show={this.props.show}
                 onClose={() => this.props.onClose()} />
         );

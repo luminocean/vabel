@@ -1,26 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
-import BasePlayerComp from './BasePlayerComp';
+import PreviewComp from './PreviewComp';
+
 import './crop.css';
 
 class CropComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showModal: false
+            showModal: false,
+            startTime: 0, // in seconds
+            endTime: 0 // in seconds
         };
     }
 
     componentWillReceiveProps(nextProps) {
+        // show or hide this modal
         // need to be explicity true or false
         if (nextProps.show === true) {
-            this.setState({
-                showModal: true
-            });
+            this.setState({showModal: true});
         } else if (nextProps.show === false) {
-            this.setState({
-                showModal: false
-            });
+            this.setState({showModal: false});
         }
     }
 
@@ -44,22 +44,10 @@ class CropComponent extends Component {
                         <div className="row">
                             <div className="col-sm-5" />
                             <div className="col-sm-4">
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <BasePlayerComp src={this.props.video.src} progress={this.props.video.progress} />
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-sm-5">
-                                        -15s
-                                    </div>
-                                    <div className="col-sm-5">
-                                        <span className="glyphicon glyphicon-repeat" aria-hidden="true"/>
-                                    </div>
-                                    <div className="col-sm-2c">
-                                        0s
-                                    </div>
-                                </div>
+                                <PreviewComp
+                                    src={this.props.src}
+                                    progress={this.props.progress}
+                                    interval={this.props.interval}/>
                             </div>
                         </div>
                     </div>
@@ -70,10 +58,9 @@ class CropComponent extends Component {
 }
 
 CropComponent.propTypes = {
-    video: PropTypes.shape({
-        src: PropTypes.string,
-        progress: PropTypes.number
-    }),
+    src: PropTypes.string,
+    progress: PropTypes.number,
+    interval: PropTypes.number,
     show: PropTypes.bool, // eslint-disable-line
     onClose: PropTypes.func
 };
