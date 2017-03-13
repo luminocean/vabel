@@ -36,6 +36,29 @@ export default class Keyboard {
         };
     }
 
+    get allowPolicy() {
+        return {
+            play: !this.state.crop.control.croping,
+            pause: 'play', // reuse
+            leap: 'play',
+            crop_replay: this.state.crop.control.croping
+        };
+    }
+
+    _check(phase) { // eslint-disable-line consistent-return
+        const res = this.allowPolicy[phase];
+
+        if (typeof (res) === 'boolean') {
+            if (!res) console.error('Operation not allowed'); // eslint-disable-line no-console
+            return res;
+        }
+        if (typeof (res) === 'string') {
+            return this._check(res);
+        }
+
+        console.error('Unknown policy key'); // eslint-disable-line no-console
+    }
+
     /**
      * Go through redux store
      */
@@ -44,7 +67,8 @@ export default class Keyboard {
             cropActions.cropDone() : cropActions.crop());
     }
 
-    _pauseOrPlay() {
+    _pauseOrPlay() { // eslint-disable-line consistent-return
+        if (!this._check('play') || !this._check('pause')) return;
         const playing = this.state.player.control.playing;
         this._dispatch(playing ? playerActions.pause() : playerActions.play());
     }
@@ -57,10 +81,12 @@ export default class Keyboard {
      * Go through event emitter
      */
     _cropReplay() { // eslint-disable-line class-methods-use-this
+        if (!this._check('crop_replay')) return;
         eventCenter.emit(cropActions.CONSTANTS.CROP_REPLAY);
     }
 
     _leap(direction) { // eslint-disable-line class-methods-use-this
+        if (!this._check('leap')) return;
         eventCenter.emit(playerActions.CONSTANTS.PLAYER_LEAP, direction);
     }
 }
