@@ -10,8 +10,7 @@ class PreviewComp extends BasicPlayerComp {
         this.state = {
             startTime: 0,
             endTime: 0,
-            sampleTime: 0,
-            replaying: false
+            sampleTime: 0
         };
     }
 
@@ -35,18 +34,12 @@ class PreviewComp extends BasicPlayerComp {
 
     play() {
         this.reset();
-        this.setState({replaying: true});
         super.play();
-    }
-
-    pause() {
-        this.setState({replaying: false});
-        super.pause();
     }
 
     _setupEventListeners() {
         eventCenter.addListener(cropActions.CONSTANTS.CROP_REPLAY, () => {
-            if (!this.state.replaying) {
+            if (!this.state.playing) {
                 this.play();
             } else {
                 this.pause();
@@ -56,8 +49,7 @@ class PreviewComp extends BasicPlayerComp {
 
     _updateProgress() {
         super._updateProgress();
-
-        if (this.isPlaying) {
+        if (this.playing) {
             // exceed croping range, pause it
             if (this.state.progress >= this.state.endTime / this.videoDuration) {
                 this.pause();

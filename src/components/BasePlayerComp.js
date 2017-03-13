@@ -36,7 +36,7 @@ class BasePlayerComp extends Component {
         this.videoPlayer.play();
     }
 
-    get isPlaying() {
+    get playing() {
         return this.videoPlayer && this.state.playing;
     }
 
@@ -87,7 +87,7 @@ class BasePlayerComp extends Component {
     // make state updated with current video progress
     // so that progress bar can also be updated
     _updateProgress() {
-        if (this.isPlaying) {
+        if (this.playing) {
             const playedTime = Math.floor(this.videoPlayer.currentTime);
             const progress = playedTime / this.videoDuration;
             this.setState({progress});
