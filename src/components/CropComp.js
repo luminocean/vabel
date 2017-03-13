@@ -42,9 +42,24 @@ class CropComponent extends Component {
                 <Modal.Body>
                     <div className="container">
                         <div className="row">
-                            <div className="col-sm-6" />
-                            <div className="col-sm-3">
-                                <BasePlayerComp video={this.props.video}/>
+                            <div className="col-sm-5" />
+                            <div className="col-sm-4">
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <BasePlayerComp video={this.props.video}/>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-sm-5">
+                                        -15s
+                                    </div>
+                                    <div className="col-sm-5">
+                                        <span className="glyphicon glyphicon-repeat" aria-hidden="true"/>
+                                    </div>
+                                    <div className="col-sm-2">
+                                        0s
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
