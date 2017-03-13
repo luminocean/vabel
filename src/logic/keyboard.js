@@ -1,5 +1,6 @@
 import * as playerActions from '../actions/playerActions';
 import * as cropActions from '../actions/cropActions';
+import eventCenter from '../logic/eventCenter';
 
 const KeyCodes = {
     SPACE: 32,
@@ -7,7 +8,8 @@ const KeyCodes = {
     RIGHT_BRACE: 93,
     GREATER: 46,
     LESS: 44,
-    C: 99
+    C: 99,
+    R: 114
 };
 
 export default class Keyboard {
@@ -26,6 +28,7 @@ export default class Keyboard {
             case KeyCodes.LESS: this._leap(false); break;
             case KeyCodes.GREATER: this._leap(true); break;
             case KeyCodes.C: this._crop(); break;
+            case KeyCodes.R: this._cropReplay(); break;
             default:
                 console.log(`Unhandled key pressed: ${ev.keyCode}`); // eslint-disable-line
                 break;
@@ -33,6 +36,9 @@ export default class Keyboard {
         };
     }
 
+    /**
+     * Go through redux store
+     */
     _crop() {
         this._dispatch(this.state.crop.control.croping ?
             cropActions.cropDone() : cropActions.crop());
@@ -49,6 +55,13 @@ export default class Keyboard {
 
     _dispatch(action) {
         this.store.dispatch(action);
+    }
+
+    /**
+     * Go through event emitter
+     */
+    _cropReplay() { // eslint-disable-line class-methods-use-this
+        eventCenter.emit(cropActions.CONSTANTS.CROP_REPLAY);
     }
 }
 

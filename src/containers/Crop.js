@@ -11,7 +11,7 @@ class Crop extends Component {
                 interval={-10}
                 progress={this.props.video.progress}
                 show={this.props.show}
-                onClose={() => this.props.onClose()} />
+                onClose={() => this.props.onClose()}/>
         );
     }
 }
@@ -31,7 +31,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({ // eslint-disable-line no-unused-vars
-    onClose: () => dispatch(actions.cropDone())
+    onClose: () => dispatch(actions.cropDone()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Crop);
