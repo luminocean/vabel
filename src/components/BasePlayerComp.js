@@ -18,8 +18,8 @@ class BasePlayerComp extends Component {
 
     componentDidMount() {
         this.mounted = true;
-        // set timer
         this._updateProgress();
+        // set timer
         this.updatingInterval = setInterval(() => {
             this._updateProgress();
         }, 300);
@@ -35,10 +35,8 @@ class BasePlayerComp extends Component {
 
     componentWillUnmount() {
         this.mounted = false;
-        if (this.updatingInterval) {
-            clearInterval(this.updatingInterval);
-            this.updatingInterval = null;
-        }
+        clearInterval(this.updatingInterval);
+        this.updatingInterval = null;
     }
 
     play() {

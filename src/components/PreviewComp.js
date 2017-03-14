@@ -88,7 +88,7 @@ class PreviewComp extends BasicPlayerComp {
 
     _updateProgress() {
         super._updateProgress();
-        if (this.playing) {
+        if (this.videoPlayer && this.state.playing) {
             // exceed croping range, pause it
             if (this.state.progress >= this.state.endTime / this.videoDuration) {
                 this.pause();
