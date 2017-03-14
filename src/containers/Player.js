@@ -33,7 +33,7 @@ class Player extends Component {
                     progress={this.props.progress}
                     onProceed={() => this.props.onProceed()}
                     onSeek={percentage => this.onSeek(percentage)}
-                    onProgressTick={() => this.props.onProgressTick()}
+                    onProgressTick={progress => this.props.onProgressTick(progress)}
                     onCrop={() => this.props.onCrop()}/>
             </div>
         );
