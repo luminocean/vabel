@@ -1,12 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import '../actions/indexActions';
-import AppComponent from '../components/AppComp';
+import RecordComp from '../components/RecordComp';
 
-class App extends Component {
+class Record extends Component {
     render() {
-        return <AppComponent />;
+        return <RecordComp />;
     }
 }
 
@@ -20,4 +19,4 @@ const mapDispatchToProps = (dispatch) => { // eslint-disable-line no-unused-vars
     return actionProps;
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(Record);

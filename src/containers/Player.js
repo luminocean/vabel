@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import PlayerComponent from '../components/PlayerComp';
+import PlayerComp from '../components/PlayerComp';
 import * as playerActions from '../actions/playerActions';
 import * as videoActions from '../actions/videoActions';
 import * as cropActions from '../actions/cropActions';
@@ -28,14 +28,16 @@ class Player extends Component {
     render() {
         return (
             <div>
-                <PlayerComponent
+                <PlayerComp
                     delegate={(delegate) => { this.delegate = delegate; }}
                     src={this.props.src}
                     progress={this.props.progress}
-                    onProceed={() => this.props.onProceed()}
+                    playing={this.props.playing}
                     onSeek={percentage => this.onSeek(percentage)}
                     onProgressTick={progress => this.props.onProgressTick(progress)}
-                    onCrop={() => this.props.onCrop()}/>
+                    onCrop={() => this.props.onCrop()}
+                    onToggle={playing => this.props.onToggle(playing)}
+                    />
             </div>
         );
     }
@@ -44,25 +46,23 @@ class Player extends Component {
 Player.propTypes = {
     src: PropTypes.string,
     progress: PropTypes.number,
-    onProceed: PropTypes.func,
+    playing: PropTypes.bool,
     onProgressTick: PropTypes.func,
-    onCrop: PropTypes.func
+    onCrop: PropTypes.func,
+    onToggle: PropTypes.func
 };
 
 const mapStateToProps = state => ({
     src: state.video.src,
-    progress: state.video.progress
+    progress: state.video.progress,
+    playing: state.player.control.playing
 });
 
 const mapDispatchToProps = (dispatch) => {
     const actionProps = {
-        // user choose to proceed playing video or not
-        onProceed: (proceed) => {
-            if (proceed) dispatch(playerActions.play());
-            else dispatch(playerActions.pause());
-        },
         onProgressTick: progress => dispatch(videoActions.tick(progress)),
-        onCrop: () => dispatch(cropActions.crop())
+        onCrop: () => dispatch(cropActions.crop()),
+        onToggle: playing => dispatch(playing ? playerActions.pause() : playerActions.play())
     };
     return actionProps;
 };

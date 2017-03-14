@@ -30,7 +30,7 @@ class PlayerComp extends BasicPlayerComp {
                     <div style={{width: '5%', display: 'inline-block'}}>
                         <span
                             className={`player-icon glyphicon glyphicon-${this.state.playing ? 'pause' : 'play'}`}
-                            onClick={() => this.props.onProceed(!this.state.playing)}
+                            onClick={() => this.props.onToggle(this.state.playing)}
                         />
                     </div>
 

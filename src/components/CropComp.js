@@ -70,7 +70,7 @@ class CropComponent extends Component {
                                 <div className="col-sm-12">
                                     <textarea
                                         className="text-area"
-                                        style={{width: '100%'}}
+                                        style={{width: '100%', height: '300px'}}
                                         onChange={ev => this.onTextChange(ev)}
                                         onFocus={() => this.props.onEditing(true)}
                                         onBlur={() => this.props.onEditing(false)}/>

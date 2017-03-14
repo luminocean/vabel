@@ -25,17 +25,20 @@ class BasePlayerComp extends Component {
         }, 300);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.playing && !this.props.playing) {
+            this.play();
+        } else if (!nextProps.playing && this.props.playing) {
+            this.pause();
+        }
+    }
+
     componentWillUnmount() {
         this.mounted = false;
         if (this.updatingInterval) {
             clearInterval(this.updatingInterval);
             this.updatingInterval = null;
         }
-    }
-
-    setState(state) {
-        if (this.mounted) super.setState(state);
-        else console.error('setState on unmounted component!'); // eslint-disable-line
     }
 
     play() {
@@ -118,7 +121,7 @@ class BasePlayerComp extends Component {
                     hidden={!this.state.loaded}
                     className="video"
                     ref={(v) => { if (v) this.player = v; }}
-                    onClick={() => this.props.onProceed(!this.state.playing)}>
+                    onClick={() => this.props.onToggle(this.state.playing)}>
                     <source src={this.props.src} />
                 </video>
             </div>
@@ -129,13 +132,15 @@ class BasePlayerComp extends Component {
 BasePlayerComp.propTypes = {
     src: PropTypes.string,
     progress: PropTypes.number,
+    playing: PropTypes.bool,
     delegate: PropTypes.func,
-    onProceed: PropTypes.func,
-    onProgressTick: PropTypes.func
+    onProgressTick: PropTypes.func,
+    onToggle: PropTypes.func
 };
 
 BasePlayerComp.defaultProps = {
-    progress: 0
+    progress: 0,
+    playing: false
 };
 
 export default BasePlayerComp;
