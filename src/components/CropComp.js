@@ -59,7 +59,7 @@ class CropComponent extends Component {
 
     render() {
         return (
-            <Modal dialogClassName="crop-modal" show={this.state.showModal} onHide={() => this.close()}>
+            <Modal dialogClassName="crop-modal" show={this.state.showModal} onHide={() => this.cancel()}>
                 <Modal.Header closeButton>
                     <Modal.Title>Write Your Notes</Modal.Title>
                 </Modal.Header>

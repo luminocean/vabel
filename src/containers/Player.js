@@ -61,7 +61,8 @@ const mapDispatchToProps = (dispatch) => {
             if (proceed) dispatch(playerActions.play());
             else dispatch(playerActions.pause());
         },
-        onProgressTick: progress => dispatch(videoActions.tick(progress))
+        onProgressTick: progress => dispatch(videoActions.tick(progress)),
+        onCrop: () => dispatch(cropActions.crop())
     };
     return actionProps;
 };
