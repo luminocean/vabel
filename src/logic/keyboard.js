@@ -40,7 +40,7 @@ export default class Keyboard {
                 case KeyCodes.SPACE: this._pauseOrPlay(); break;
                 case KeyCodes.LESS: this._leap(false); break;
                 case KeyCodes.GREATER: this._leap(true); break;
-                case KeyCodes.ENTER: this._cropFinish(); break;
+                case KeyCodes.ENTER: this._cropSave(); break;
                 case KeyCodes.C:
                 case KeyCodes.c: this._crop(); break;
                 case KeyCodes.R:
@@ -71,8 +71,10 @@ export default class Keyboard {
             play: !this.state.crop.control.croping,
             pause: 'play', // reuse
             leap: 'play',
-            crop_replay: this.state.crop.control.croping,
-            crop_adjust: this.state.crop.control.croping
+            crop_done: this.state.crop.control.croping,
+            crop_replay: 'crop_done',
+            crop_adjust: 'crop_done',
+            crop_finish: 'crop_done'
         };
     }
 
@@ -109,13 +111,10 @@ export default class Keyboard {
         eventCenter.emit(playerActions.CONSTANTS.PLAYER_PAUSE);
     }
 
-    // save crop notes
-    _cropFinish() {}
-
     // show or hide crop panel
     _crop() {
         if (this.state.crop.control.croping) {
-            this._dispatch(cropActions.cropDone());
+            this._dispatch(cropActions.cropCancel());
         } else {
             // need to pause player while croping
             this._pause();
@@ -134,6 +133,10 @@ export default class Keyboard {
     /**
      * Go through event emitter only
      */
+    _cropSave() { // eslint-disable-line class-methods-use-this
+        if (!this._check('crop_finish')) return;
+        eventCenter.emit(cropActions.CONSTANTS.CROP_SAVE);
+    }
 
     _cropReplay() { // eslint-disable-line class-methods-use-this
         if (!this._check('crop_replay')) return;

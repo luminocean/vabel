@@ -7,10 +7,11 @@ import './crop.css';
 class CropComponent extends Component {
     constructor(props) {
         super(props);
+
+        this.previewDelegate = null;
         this.state = {
             showModal: false,
-            startTime: 0, // in seconds
-            endTime: 0 // in seconds
+            text: ''
         };
     }
 
@@ -24,12 +25,35 @@ class CropComponent extends Component {
         }
     }
 
+    onTextChange(ev) {
+        this.setState({
+            text: ev.target.value
+        });
+    }
+
+    get saveData() {
+        const previewData = this.previewDelegate.preview();
+        return Object.assign({}, previewData, {
+            text: this.state.text
+        });
+    }
+
     cancel() {
         this.setState({
             showModal: false
         });
         if (this.props.onCancel) {
             this.props.onCancel();
+        }
+    }
+
+    save() {
+        this.setState({
+            showModal: false
+        });
+
+        if (this.props.onSave) {
+            this.props.onSave(this.saveData);
         }
     }
 
@@ -47,6 +71,7 @@ class CropComponent extends Component {
                                     <textarea
                                         className="text-area"
                                         style={{width: '100%'}}
+                                        onChange={ev => this.onTextChange(ev)}
                                         onFocus={() => this.props.onEditing(true)}
                                         onBlur={() => this.props.onEditing(false)}/>
                                 </div>
@@ -54,6 +79,7 @@ class CropComponent extends Component {
                         </div>
                         <div className="col-sm-6">
                             <PreviewComp
+                                delegate={(p) => { this.previewDelegate = p; }}
                                 src={this.props.src}
                                 progress={this.props.progress}
                                 interval={this.props.interval}/>
@@ -64,7 +90,7 @@ class CropComponent extends Component {
                     <div className="row">
                         <div className="col-sm-9"/>
                         <div className="col-sm-1">
-                            <Button bsStyle="success" onClick={() => {}}>SAVE</Button>
+                            <Button bsStyle="success" onClick={() => this.save()}>SAVE</Button>
                         </div>
                         <div className="col-sm-1">
                             <Button onClick={() => this.cancel()}>CANCEL</Button>
@@ -82,6 +108,7 @@ CropComponent.propTypes = {
     interval: PropTypes.number,
     show: PropTypes.bool, // eslint-disable-line
     onCancel: PropTypes.func,
+    onSave: PropTypes.func,
     onEditing: PropTypes.func
 };
 

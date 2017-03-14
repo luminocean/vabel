@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PlayerComponent from '../components/PlayerComp';
 import * as playerActions from '../actions/playerActions';
 import * as videoActions from '../actions/videoActions';
+import * as cropActions from '../actions/cropActions';
 import eventCenter from '../logic/eventCenter';
 
 

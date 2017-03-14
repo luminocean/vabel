@@ -47,6 +47,16 @@ class PreviewComp extends BasicPlayerComp {
         super.play();
     }
 
+    get delegate() {
+        const parentDelegate = super.delegate;
+        return Object.assign({}, parentDelegate, {
+            preview: () => ({
+                startTime: this.state.startTime,
+                endTime: this.state.endTime
+            })
+        });
+    }
+
     _cancelEvents() {
         [...this._listeners.entries()].forEach((entry) => {
             const key = entry[0];

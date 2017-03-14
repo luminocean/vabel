@@ -84,6 +84,7 @@ class BasePlayerComp extends Component {
 
     get delegate() {
         return {
+            src: this.props.src,
             seek: (percentage) => {
                 this.seek(percentage);
             },

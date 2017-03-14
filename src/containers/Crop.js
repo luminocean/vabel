@@ -14,32 +14,34 @@ class Crop extends Component {
     render() {
         return (
             <CropComponent
-                src={this.props.video.src}
+                src={this.props.src}
                 interval={-10}
-                progress={this.props.video.progress}
+                progress={this.props.progress}
                 show={this.props.show}
                 onCancel={() => this.props.onCancel()}
+                onSave={data => this.props.onSave(data)}
                 onEditing={toEdit => this.onEditing(toEdit)}/>
         );
     }
 }
 
 Crop.propTypes = {
-    video: PropTypes.shape({
-        src: PropTypes.string,
-        progress: PropTypes.number
-    }),
+    src: PropTypes.string,
+    progress: PropTypes.number,
     show: PropTypes.bool,
-    onCancel: PropTypes.func
+    onCancel: PropTypes.func,
+    onSave: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
     show: state.crop.control.croping,
-    video: state.video
+    src: state.video.src,
+    progress: state.video.progress
 });
 
 const mapDispatchToProps = dispatch => ({ // eslint-disable-line no-unused-vars
-    onCancel: () => dispatch(actions.cropDone())
+    onCancel: () => dispatch(actions.cropCancel()),
+    onSave: data => dispatch(actions.cropSave(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Crop);

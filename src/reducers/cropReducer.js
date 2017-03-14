@@ -7,7 +7,11 @@ const control = (state = {}, action) => {
         return Object.assign({}, state, {
             croping: true
         });
-    case CONSTANTS.CROP_DONE:
+    case CONSTANTS.CROP_CANCEL:
+        return Object.assign({}, state, {
+            croping: false
+        });
+    case CONSTANTS.CROP_SAVE:
         return Object.assign({}, state, {
             croping: false
         });
@@ -16,6 +20,17 @@ const control = (state = {}, action) => {
     }
 };
 
-const reducers = { control };
+const records = (state = {}, action) => {
+    switch (action.type) {
+    case CONSTANTS.CROP_SAVE:
+        return Object.assign({}, state, {
+            list: (state.list || []).concat([action.payload])
+        });
+    default:
+        return state;
+    }
+};
+
+const reducers = { control, records };
 const combined = combineReducers(reducers);
 module.exports = combined;

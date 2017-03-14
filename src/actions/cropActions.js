@@ -2,7 +2,8 @@ import { createAction } from 'redux-actions';
 
 export const CONSTANTS = {
     CROP: 'CROP',
-    CROP_DONE: 'CROP_DONE',
+    CROP_CANCEL: 'CROP_CANCEL',
+    CROP_SAVE: 'CROP_SAVE',
     CROP_REPLAY: 'CROP_REPLAY',
     CROP_ADJUST: 'CROP_ADJUST',
     // CROP_START_DECREASE: 'CROP_START_DECREASE',
@@ -14,5 +15,5 @@ export const CONSTANTS = {
 };
 
 export const crop = createAction(CONSTANTS.CROP);
-export const cropDone = createAction(CONSTANTS.CROP_DONE);
-
+export const cropCancel = createAction(CONSTANTS.CROP_CANCEL);
+export const cropSave = createAction(CONSTANTS.CROP_SAVE, data => data);
