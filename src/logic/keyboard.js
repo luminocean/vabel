@@ -116,8 +116,6 @@ export default class Keyboard {
         if (this.state.crop.control.croping) {
             this._dispatch(cropActions.cropCancel());
         } else {
-            // need to pause player while croping
-            this._pause();
             // register (which will cause modal to show)
             this._dispatch(cropActions.crop());
         }

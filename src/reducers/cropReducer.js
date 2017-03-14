@@ -3,7 +3,7 @@ import { CONSTANTS } from '../actions/cropActions';
 
 const control = (state = {}, action) => {
     switch (action.type) {
-    case CONSTANTS.CROP:
+    case CONSTANTS.CROP_START:
         return Object.assign({}, state, {
             croping: true
         });

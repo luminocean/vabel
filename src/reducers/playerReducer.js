@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { CONSTANTS } from '../actions/playerActions';
+import { CONSTANTS as CROP_CONSTANTS } from '../actions/cropActions';
 
 const initState = {
     videoExists: true
@@ -11,6 +12,7 @@ const control = (state = initState, action) => {
         return Object.assign({}, state, {
             playing: true
         });
+    case CROP_CONSTANTS.CROP_START: // while croping, player should pause as well
     case CONSTANTS.PLAYER_PAUSE:
         return Object.assign({}, state, {
             playing: false
