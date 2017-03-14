@@ -37,17 +37,17 @@ class PlayerComp extends BasicPlayerComp {
                     {/* progress bar */}
                     <div style={{width: '75%', display: 'inline-block'}}>
                         <ProgressBar
-                            progress={this.props.progress}
+                            progress={this.progress}
                             onSeek={percentage => this.props.onSeek(percentage)} />
                     </div>
 
                     {/* timer */}
                     <div style={{width: '10%', display: 'inline-block', marginLeft: '2%'}}>
-                        <span className="player-icon timer">{Utils.secondsToTimeString(this.videoDuration * this.props.progress)}</span>
+                        <span className="player-icon timer">{Utils.secondsToTimeString(this.videoDuration * this.progress)}</span>
                     </div>
 
                     <div style={{width: '8%', display: 'inline-block'}}>
-                        <span className={'player-icon glyphicon glyphicon-scissors'}/>
+                        <span className={'player-icon glyphicon glyphicon-scissors'} onClick={() => this.props.onCrop()}/>
                         <span className="player-icon  glyphicon glyphicon-fullscreen" onClick={() => this.videoPlayer.webkitRequestFullScreen()}/>
                     </div>
                 </div>
@@ -57,7 +57,8 @@ class PlayerComp extends BasicPlayerComp {
 }
 
 PlayerComp.propTypes = {
-    onSeek: PropTypes.func
+    onSeek: PropTypes.func,
+    onCrop: PropTypes.func
 };
 
 export default PlayerComp;

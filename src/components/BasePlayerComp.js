@@ -52,6 +52,11 @@ class BasePlayerComp extends Component {
         this.videoPlayer.pause();
     }
 
+    get progress() {
+        return this.state.progress !== undefined ?
+            this.state.progress : this.props.progress;
+    }
+
     set player(videoElemement) {
         const ele = videoElemement;
         if (!ele) return; // videoElemement might be undefined
@@ -59,11 +64,7 @@ class BasePlayerComp extends Component {
         ele.ondurationchange = () => {
             this.videoPlayer = ele;
             this.videoDuration = ele.duration;
-            if (this.state.progress !== undefined) {
-                this.videoPlayer.currentTime = this.state.progress;
-            } else {
-                this.videoPlayer.currentTime = this.props.progress;
-            }
+            this.videoPlayer.currentTime = this.progress;
 
             this.setState({
                 loaded: true

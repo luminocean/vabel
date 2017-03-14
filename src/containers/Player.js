@@ -29,27 +29,28 @@ class Player extends Component {
             <div>
                 <PlayerComponent
                     delegate={(delegate) => { this.delegate = delegate; }}
-                    src={this.props.video.src}
-                    progress={this.props.video.progress}
-                    onProceed={this.props.onProceed}
+                    src={this.props.src}
+                    progress={this.props.progress}
+                    onProceed={() => this.props.onProceed()}
                     onSeek={percentage => this.onSeek(percentage)}
-                    onProgressTick={this.props.onProgressTick}/>
+                    onProgressTick={() => this.props.onProgressTick()}
+                    onCrop={() => this.props.onCrop()}/>
             </div>
         );
     }
 }
 
 Player.propTypes = {
-    video: PropTypes.shape({
-        src: PropTypes.string,
-        progress: PropTypes.number
-    }),
+    src: PropTypes.string,
+    progress: PropTypes.number,
     onProceed: PropTypes.func,
-    onProgressTick: PropTypes.func
+    onProgressTick: PropTypes.func,
+    onCrop: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-    video: state.video
+    src: state.video.src,
+    progress: state.video.progress
 });
 
 const mapDispatchToProps = (dispatch) => {
