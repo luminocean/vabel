@@ -19,36 +19,36 @@ class PlayerComp extends BasicPlayerComp {
 
     render() {
         return (
-            <div className="row">
+            <div>
                 {/* video */}
                 {super.render()}
 
                 {/* control bar */}
-                <div className="row control-bar">
+                <div className="control-bar">
+                    {/* use style manually for better layout preciseion */}
                     {/* play or pause */}
-                    <div className="col-sm-1">
+                    <div style={{width: '5%', display: 'inline-block'}}>
                         <span
-                            className={`glyphicon glyphicon-${this.state.playing ? 'pause' : 'play'}`}
-                            aria-hidden="true"
+                            className={`player-icon glyphicon glyphicon-${this.state.playing ? 'pause' : 'play'}`}
                             onClick={() => this.props.onProceed(!this.state.playing)}
                         />
                     </div>
 
                     {/* progress bar */}
-                    <div className="col-sm-9">
+                    <div style={{width: '75%', display: 'inline-block'}}>
                         <ProgressBar
                             progress={this.props.progress}
                             onSeek={percentage => this.props.onSeek(percentage)} />
                     </div>
 
                     {/* timer */}
-                    <div className="col-sm-1">
-                        <span className="timer">{Utils.secondsToTimeString(this.videoDuration * this.props.progress)}</span>
+                    <div style={{width: '10%', display: 'inline-block', marginLeft: '2%'}}>
+                        <span className="player-icon timer">{Utils.secondsToTimeString(this.videoDuration * this.props.progress)}</span>
                     </div>
 
-                    {/* full screen */}
-                    <div className="col-sm-1">
-                        <span className="glyphicon glyphicon-fullscreen" onClick={() => this.videoPlayer.webkitRequestFullScreen()}/>
+                    <div style={{width: '8%', display: 'inline-block'}}>
+                        <span className={'player-icon glyphicon glyphicon-scissors'}/>
+                        <span className="player-icon  glyphicon glyphicon-fullscreen" onClick={() => this.videoPlayer.webkitRequestFullScreen()}/>
                     </div>
                 </div>
             </div>

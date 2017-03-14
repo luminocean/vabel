@@ -4,6 +4,7 @@ import eventCenter from '../logic/eventCenter';
 
 const KeyCodes = {
     SPACE: 32,
+    ENTER: 13,
     LEFT_BRACE: 91,
     RIGHT_BRACE: 93,
     GREATER: 46,
@@ -39,6 +40,7 @@ export default class Keyboard {
                 case KeyCodes.SPACE: this._pauseOrPlay(); break;
                 case KeyCodes.LESS: this._leap(false); break;
                 case KeyCodes.GREATER: this._leap(true); break;
+                case KeyCodes.ENTER: this._cropFinish(); break;
                 case KeyCodes.C:
                 case KeyCodes.c: this._crop(); break;
                 case KeyCodes.R:
@@ -107,6 +109,10 @@ export default class Keyboard {
         eventCenter.emit(playerActions.CONSTANTS.PLAYER_PAUSE);
     }
 
+    // save crop notes
+    _cropFinish() {}
+
+    // show or hide crop panel
     _crop() {
         if (this.state.crop.control.croping) {
             this._dispatch(cropActions.cropDone());

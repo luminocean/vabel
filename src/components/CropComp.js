@@ -24,12 +24,12 @@ class CropComponent extends Component {
         }
     }
 
-    close() {
+    cancel() {
         this.setState({
             showModal: false
         });
-        if (this.props.onClose) {
-            this.props.onClose();
+        if (this.props.onCancel) {
+            this.props.onCancel();
         }
     }
 
@@ -37,7 +37,7 @@ class CropComponent extends Component {
         return (
             <Modal dialogClassName="crop-modal" show={this.state.showModal} onHide={() => this.close()}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Write Your Notes</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="row">
@@ -67,7 +67,7 @@ class CropComponent extends Component {
                             <Button bsStyle="success" onClick={() => {}}>SAVE</Button>
                         </div>
                         <div className="col-sm-1">
-                            <Button onClick={() => this.close()}>CANCEL</Button>
+                            <Button onClick={() => this.cancel()}>CANCEL</Button>
                         </div>
                     </div>
                 </Modal.Footer>
@@ -81,7 +81,7 @@ CropComponent.propTypes = {
     progress: PropTypes.number,
     interval: PropTypes.number,
     show: PropTypes.bool, // eslint-disable-line
-    onClose: PropTypes.func,
+    onCancel: PropTypes.func,
     onEditing: PropTypes.func
 };
 

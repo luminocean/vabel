@@ -6,7 +6,7 @@ import eventCenter from '../logic/eventCenter';
 
 class Crop extends Component {
     onEditing(toEdit) { // eslint-disable-line
-        console.info(`${toEdit ? 'Enter' : 'Exit'} editing mode`);
+        console.info(`${toEdit ? 'Enter' : 'Exit'} editing mode`); // eslint-disable-line no-console
         eventCenter.emit(toEdit ?
             actions.CONSTANTS.CROP_ENTER_EDITING : actions.CONSTANTS.CROP_EXIT_EDITING);
     }
@@ -18,7 +18,7 @@ class Crop extends Component {
                 interval={-10}
                 progress={this.props.video.progress}
                 show={this.props.show}
-                onClose={() => this.props.onClose()}
+                onCancel={() => this.props.onCancel()}
                 onEditing={toEdit => this.onEditing(toEdit)}/>
         );
     }
@@ -30,7 +30,7 @@ Crop.propTypes = {
         progress: PropTypes.number
     }),
     show: PropTypes.bool,
-    onClose: PropTypes.func
+    onCancel: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -39,7 +39,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({ // eslint-disable-line no-unused-vars
-    onClose: () => dispatch(actions.cropDone())
+    onCancel: () => dispatch(actions.cropDone())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Crop);
