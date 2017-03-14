@@ -20,7 +20,16 @@ const control = (state = {}, action) => {
     }
 };
 
-const records = (state = {}, action) => {
+const record = (state = {
+    // just for test purpose
+    list: [{
+        startTime: 630,
+        endTime: 640,
+        duration: 1440,
+        text: 'textttt',
+        src: 'http://asda.com'
+    }]
+}, action) => {
     switch (action.type) {
     case CONSTANTS.CROP_SAVE:
         return Object.assign({}, state, {
@@ -31,6 +40,6 @@ const records = (state = {}, action) => {
     }
 };
 
-const reducers = { control, records };
+const reducers = { control, record };
 const combined = combineReducers(reducers);
 module.exports = combined;

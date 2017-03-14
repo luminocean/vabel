@@ -85,7 +85,6 @@ class BasePlayerComp extends Component {
             this.videoPlayer = ele;
             this.videoDuration = ele.duration;
             this.videoPlayer.currentTime = this.progress;
-
             this.setState({
                 loaded: true
             });

@@ -15,6 +15,8 @@ class PlayerComp extends BasicPlayerComp {
     _setupEventListeners() {
         eventCenter.addListener(playerActions.CONSTANTS.PLAYER_PLAY, () => this.play());
         eventCenter.addListener(playerActions.CONSTANTS.PLAYER_PAUSE, () => this.pause());
+        eventCenter.addListener(playerActions.CONSTANTS.PLAYER_SEEK, record =>
+            this.seek(record.startTime / record.duration));
     }
 
     render() {
