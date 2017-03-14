@@ -20,7 +20,7 @@ const control = (state = {}, action) => {
     }
 };
 
-const record = (state = {
+const dummyInitState = {
     // just for test purpose
     list: [{
         startTime: 630,
@@ -29,7 +29,9 @@ const record = (state = {
         text: 'textttt',
         src: 'http://asda.com'
     }]
-}, action) => {
+};
+
+const record = (state = dummyInitState, action) => {
     switch (action.type) {
     case CONSTANTS.CROP_SAVE:
         return Object.assign({}, state, {

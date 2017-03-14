@@ -2,7 +2,7 @@ import React from 'react';
 import Player from '../containers/Player';
 import Crop from '../containers/Crop';
 import Record from '../containers/Record';
-import './app.css';
+import './app.scss';
 
 class AppComp extends React.Component {
     render() {

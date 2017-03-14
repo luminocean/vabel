@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import PreviewComp from './PreviewComp';
-import './crop.css';
+import './crop.scss';
 
 class CropComponent extends Component {
     constructor(props) {
